@@ -1,0 +1,2 @@
+selected_model,best_test_model,best_cv_model,selected_test_MAE,selected_test_RMSE,selected_test_R2,best_test_RMSE,best_cv_RMSE,selection_reason
+BaseHistGradientBoostingRegressorAlt,HistGradientBoostingRegressor,WeightedBlendBaseEnhancedHGB,2393.5902,2982.4414,0.9565,2971.153,2940.5779,"Best 5-fold CV RMSE was WeightedBlendBaseEnhancedHGB at 2940.58; best raw test RMSE was HistGradientBoostingRegressor at 2971.15. Applied a 1.0% parsimony rule and selected BaseHistGradientBoostingRegressorAlt (CV RMSE 2942.43, test RMSE 2982.44, complexity score 2)."

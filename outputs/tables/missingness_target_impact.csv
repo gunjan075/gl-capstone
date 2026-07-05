@@ -1,0 +1,17 @@
+analysis,segment,customer_count,mean_cost,median_cost,mean_vs_overall
+BMI missing,present,24010,27160.64,27148.0,13.24
+BMI missing,missing,990,26826.41,27148.0,-321.0
+Year_last_admitted missing,present,13119,29384.51,29616.0,2237.11
+Year_last_admitted missing,missing,11881,24677.2,23446.0,-2470.21
+BMI missing by smoking_status,"smoking_status=Unknown, present",7253,27379.39,27148.0,231.98
+BMI missing by smoking_status,"smoking_status=formerly smoked, present",4091,26992.96,27148.0,-154.45
+BMI missing by smoking_status,"smoking_status=never smoked, present",9052,27102.47,27148.0,-44.94
+BMI missing by smoking_status,"smoking_status=smokes, present",3614,27057.17,27148.0,-90.23
+BMI missing by smoking_status,"smoking_status=Unknown, missing",302,26481.97,27148.0,-665.44
+BMI missing by smoking_status,"smoking_status=formerly smoked, missing",238,28070.91,29616.0,923.5
+BMI missing by smoking_status,"smoking_status=never smoked, missing",197,26064.34,25914.0,-1083.07
+BMI missing by smoking_status,"smoking_status=smokes, missing",253,26660.25,27148.0,-487.15
+Admission missing by other-company coverage,"covered_by_any_other_company=N, present",7886,28146.18,28382.0,998.78
+Admission missing by other-company coverage,"covered_by_any_other_company=Y, present",5233,31250.64,30850.0,4103.24
+Admission missing by other-company coverage,"covered_by_any_other_company=N, missing",9532,24566.21,23446.0,-2581.2
+Admission missing by other-company coverage,"covered_by_any_other_company=Y, missing",2349,25127.58,23446.0,-2019.83

@@ -1,0 +1,90 @@
+{
+  "compile": {
+    "run_all.py": true,
+    "insurance_modeling.py": true,
+    "app.py": true
+  },
+  "required_artifacts": {
+    "Milestone_1_Insurance_Price_Prediction.docx": true,
+    "Milestone_2_Insurance_Price_Prediction.docx": true,
+    "Insurance_Price_Prediction_Final_Presentation.pptx": true,
+    "app.py": true,
+    "outputs/models/final_model.pkl": true,
+    "outputs/models/model_metrics.csv": true,
+    "outputs/models/final_model_summary.csv": true,
+    "outputs/models/model_metadata.json": true,
+    "outputs/models/feature_importance.csv": true,
+    "outputs/models/repeated_cv_metrics.csv": true,
+    "outputs/models/price_grid_evaluation.csv": true,
+    "outputs/models/calibration_comparison.csv": true,
+    "outputs/models/ordinal_challenger_metrics.csv": true,
+    "outputs/models/app_schema.json": true,
+    "outputs/models/shap_status.json": true,
+    "outputs/figures/target_price_grid_frequency.png": true,
+    "outputs/figures/calibration_curve.png": true,
+    "outputs/tables/target_grid_summary.csv": true,
+    "outputs/tables/feature_signal_strength.csv": true,
+    "outputs/tables/variable_type_classification.csv": true,
+    "outputs/reports/milestone1_rubric_coverage_matrix.csv": true,
+    "notebooks/01_milestone1_eda.ipynb": true,
+    "notebooks/02_milestone2_modeling.ipynb": true,
+    "notebooks/01_milestone1_eda.html": true,
+    "outputs/notebooks/01_milestone1_eda.html": true,
+    "notebooks/02_milestone2_modeling.html": true,
+    "outputs/notebooks/02_milestone2_modeling.html": true
+  },
+  "prediction": {
+    "model_loads": true,
+    "prediction_count": 5,
+    "first_5_predictions": [
+      19133.075217700298,
+      7686.058176154558,
+      29086.55361549769,
+      25242.339615073633,
+      29889.6319309829
+    ],
+    "all_finite": true
+  },
+  "notebook_quality": {
+    "01_milestone1_eda.ipynb": {
+      "exists": true,
+      "cell_count": 109,
+      "technical_interpretation_count": 43,
+      "business_interpretation_count": 43,
+      "passes_threshold": true
+    },
+    "02_milestone2_modeling.ipynb": {
+      "exists": true,
+      "cell_count": 62,
+      "technical_interpretation_count": 20,
+      "business_interpretation_count": 20,
+      "passes_threshold": true
+    }
+  },
+  "notebook_html": {
+    "notebooks/01_milestone1_eda.html": true,
+    "outputs/notebooks/01_milestone1_eda.html": true,
+    "notebooks/02_milestone2_modeling.html": true,
+    "outputs/notebooks/02_milestone2_modeling.html": true
+  },
+  "docx_interpretation_counts": {
+    "Milestone_1_Insurance_Price_Prediction.docx": {
+      "actual_file": "Milestone_1_Insurance_Price_Prediction.docx",
+      "technical_interpretation_count": 22,
+      "business_interpretation_count": 22,
+      "passes_threshold": true
+    }
+  },
+  "rubric_matrix": {
+    "exists": true,
+    "row_count": 12,
+    "required_columns_present": true,
+    "all_covered": true,
+    "sections": [
+      "Data Pre-processing",
+      "Data Report",
+      "Extensive EDA",
+      "Initial EDA"
+    ]
+  }
+}

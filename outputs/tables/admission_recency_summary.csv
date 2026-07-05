@@ -1,0 +1,5 @@
+admission_recency_group,customer_count,mean_cost,median_cost,mean_weight,mean_bmi,mean_years_since_last_admitted
+Admitted 16+ years ago,6399,40326.87,38254.0,80.0,31.2,21.82
+Admitted 6-15 years ago,5022,22175.63,22212.0,68.37,31.32,10.46
+Admitted recently (0-5 years),1698,9468.66,8638.0,58.89,31.1,3.55
+No known admission,11881,24677.2,23446.0,70.28,31.42,0.0

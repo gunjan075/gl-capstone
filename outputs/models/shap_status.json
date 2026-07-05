@@ -1,0 +1,8 @@
+{
+  "available": true,
+  "model": "BaseLightGBMRegressor",
+  "status": "completed",
+  "sample_rows": 500,
+  "table": "outputs/models/shap_importance.csv",
+  "figure": "outputs/figures/shap_importance_bar.png"
+}

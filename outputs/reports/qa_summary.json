@@ -1,0 +1,233 @@
+{
+  "docx_checks": {
+    "Milestone_1_Insurance_Price_Prediction.docx": {
+      "Milestone 1 Submission": true,
+      "Data Report": true,
+      "Data Pre-processing": true,
+      "Extensive Exploratory Data Analysis": true,
+      "Technical interpretation:": true,
+      "Business interpretation:": true
+    },
+    "Milestone_2_Insurance_Price_Prediction.docx": {
+      "Milestone 2 Submission": true,
+      "Model Selection": true,
+      "Model Comparison": true,
+      "Business Insights": true
+    }
+  },
+  "pptx": {
+    "slides": 19,
+    "text_summary": [
+      {
+        "slide": 1,
+        "text_count": 8,
+        "chars": 153
+      },
+      {
+        "slide": 2,
+        "text_count": 2,
+        "chars": 580
+      },
+      {
+        "slide": 3,
+        "text_count": 2,
+        "chars": 827
+      },
+      {
+        "slide": 4,
+        "text_count": 2,
+        "chars": 397
+      },
+      {
+        "slide": 5,
+        "text_count": 11,
+        "chars": 88
+      },
+      {
+        "slide": 6,
+        "text_count": 2,
+        "chars": 661
+      },
+      {
+        "slide": 7,
+        "text_count": 2,
+        "chars": 443
+      },
+      {
+        "slide": 8,
+        "text_count": 2,
+        "chars": 337
+      },
+      {
+        "slide": 9,
+        "text_count": 2,
+        "chars": 502
+      },
+      {
+        "slide": 10,
+        "text_count": 2,
+        "chars": 278
+      },
+      {
+        "slide": 11,
+        "text_count": 1,
+        "chars": 28
+      },
+      {
+        "slide": 12,
+        "text_count": 2,
+        "chars": 339
+      },
+      {
+        "slide": 13,
+        "text_count": 2,
+        "chars": 509
+      },
+      {
+        "slide": 14,
+        "text_count": 2,
+        "chars": 59
+      },
+      {
+        "slide": 15,
+        "text_count": 2,
+        "chars": 556
+      },
+      {
+        "slide": 16,
+        "text_count": 2,
+        "chars": 483
+      },
+      {
+        "slide": 17,
+        "text_count": 1,
+        "chars": 25
+      },
+      {
+        "slide": 18,
+        "text_count": 1,
+        "chars": 24
+      },
+      {
+        "slide": 19,
+        "text_count": 1,
+        "chars": 23
+      }
+    ],
+    "overflow_check": {
+      "status": "passed",
+      "slide_width": 10.0,
+      "slide_height": 5.625,
+      "margin": 0.15,
+      "overflow_count": 0,
+      "overflows": []
+    }
+  },
+  "smoke_tests": {
+    "compile": {
+      "run_all.py": true,
+      "insurance_modeling.py": true,
+      "app.py": true
+    },
+    "required_artifacts": {
+      "Milestone_1_Insurance_Price_Prediction.docx": true,
+      "Milestone_2_Insurance_Price_Prediction.docx": true,
+      "Insurance_Price_Prediction_Final_Presentation.pptx": true,
+      "app.py": true,
+      "outputs/models/final_model.pkl": true,
+      "outputs/models/model_metrics.csv": true,
+      "outputs/models/final_model_summary.csv": true,
+      "outputs/models/model_metadata.json": true,
+      "outputs/models/feature_importance.csv": true,
+      "outputs/models/repeated_cv_metrics.csv": true,
+      "outputs/models/price_grid_evaluation.csv": true,
+      "outputs/models/calibration_comparison.csv": true,
+      "outputs/models/ordinal_challenger_metrics.csv": true,
+      "outputs/models/app_schema.json": true,
+      "outputs/models/shap_status.json": true,
+      "outputs/figures/target_price_grid_frequency.png": true,
+      "outputs/figures/calibration_curve.png": true,
+      "outputs/tables/target_grid_summary.csv": true,
+      "outputs/tables/feature_signal_strength.csv": true,
+      "outputs/tables/variable_type_classification.csv": true,
+      "outputs/reports/milestone1_rubric_coverage_matrix.csv": true,
+      "notebooks/01_milestone1_eda.ipynb": true,
+      "notebooks/02_milestone2_modeling.ipynb": true,
+      "notebooks/01_milestone1_eda.html": true,
+      "outputs/notebooks/01_milestone1_eda.html": true,
+      "notebooks/02_milestone2_modeling.html": true,
+      "outputs/notebooks/02_milestone2_modeling.html": true
+    },
+    "prediction": {
+      "model_loads": true,
+      "prediction_count": 5,
+      "first_5_predictions": [
+        19133.075217700298,
+        7686.058176154558,
+        29086.55361549769,
+        25242.339615073633,
+        29889.6319309829
+      ],
+      "all_finite": true
+    },
+    "notebook_quality": {
+      "01_milestone1_eda.ipynb": {
+        "exists": true,
+        "cell_count": 109,
+        "technical_interpretation_count": 43,
+        "business_interpretation_count": 43,
+        "passes_threshold": true
+      },
+      "02_milestone2_modeling.ipynb": {
+        "exists": true,
+        "cell_count": 62,
+        "technical_interpretation_count": 20,
+        "business_interpretation_count": 20,
+        "passes_threshold": true
+      }
+    },
+    "notebook_html": {
+      "notebooks/01_milestone1_eda.html": true,
+      "outputs/notebooks/01_milestone1_eda.html": true,
+      "notebooks/02_milestone2_modeling.html": true,
+      "outputs/notebooks/02_milestone2_modeling.html": true
+    },
+    "docx_interpretation_counts": {
+      "Milestone_1_Insurance_Price_Prediction.docx": {
+        "actual_file": "Milestone_1_Insurance_Price_Prediction.docx",
+        "technical_interpretation_count": 22,
+        "business_interpretation_count": 22,
+        "passes_threshold": true
+      }
+    },
+    "rubric_matrix": {
+      "exists": true,
+      "row_count": 12,
+      "required_columns_present": true,
+      "all_covered": true,
+      "sections": [
+        "Data Pre-processing",
+        "Data Report",
+        "Extensive EDA",
+        "Initial EDA"
+      ]
+    }
+  },
+  "artifacts": {
+    "app": "app.py",
+    "notebooks": [
+      "notebooks/01_milestone1_eda.ipynb",
+      "notebooks/02_milestone2_modeling.ipynb"
+    ],
+    "notebook_html": [
+      "notebooks/01_milestone1_eda.html",
+      "outputs/notebooks/01_milestone1_eda.html",
+      "notebooks/02_milestone2_modeling.html",
+      "outputs/notebooks/02_milestone2_modeling.html"
+    ],
+    "requirements": "requirements.txt",
+    "readme": "README.md",
+    "final_model": "outputs/models/final_model.pkl",
+    "milestone1_rubric_coverage_matrix": "outputs/reports/milestone1_rubric_coverage_matrix.csv"
+  }
+}

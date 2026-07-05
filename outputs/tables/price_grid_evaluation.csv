@@ -1,0 +1,5 @@
+variant,MAE,RMSE,R2,MAPE,SMAPE,exact_band_accuracy,within_1_band_accuracy,within_2_band_accuracy,within_3_band_accuracy
+raw_continuous,2393.59019,2982.44142,0.95649,11.69329,11.26017,0.1592,0.4606,0.696,0.847
+calibrated_continuous,2404.68276,3009.75577,0.95569,11.63329,11.18286,0.1672,0.4528,0.6908,0.8502
+rounded_to_nearest_price_band,2379.152,3007.21521,0.95577,11.64899,11.19377,0.1592,0.4606,0.696,0.847
+calibrated_then_rounded,2389.7644,3030.77032,0.95507,11.65667,11.11256,0.1672,0.4528,0.6908,0.8502

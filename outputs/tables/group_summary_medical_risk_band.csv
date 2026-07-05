@@ -1,0 +1,4 @@
+medical_risk_band,count,mean,median
+High,3399,28122.42,28382.0
+Moderate,13699,27550.93,27148.0
+Low,7902,26028.47,25914.0

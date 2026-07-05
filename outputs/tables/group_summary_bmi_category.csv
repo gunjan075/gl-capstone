@@ -1,0 +1,5 @@
+bmi_category,count,mean,median
+Underweight,478,27912.15,27148.0
+Normal,4315,27393.37,27148.0
+Overweight,6629,27242.57,27148.0
+Obese,13578,26995.86,27148.0

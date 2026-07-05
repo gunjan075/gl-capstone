@@ -1,0 +1,11 @@
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+outputs/logs/
+outputs/branch_compare/
+outputs/colab/
+outputs/github_upload_gl_capstone/
+outputs/presentation_workspace/
+outputs/reports/docx_render_*/
+*.zip
+*_updated.docx

@@ -1,0 +1,38 @@
+column,category,count,pct
+Occupation,Student,10169,40.68
+Occupation,Business,10020,40.08
+Occupation,Salried,4811,19.24
+cholesterol_level,150 to 175,8763,35.05
+cholesterol_level,125 to 150,8339,33.36
+cholesterol_level,200 to 225,2963,11.85
+cholesterol_level,175 to 200,2881,11.52
+cholesterol_level,225 to 250,2054,8.22
+Gender,Male,16422,65.69
+Gender,Female,8578,34.31
+smoking_status,never smoked,9249,37.0
+smoking_status,Unknown,7555,30.22
+smoking_status,formerly smoked,4329,17.32
+smoking_status,smokes,3867,15.47
+Location,Bangalore,1742,6.97
+Location,Jaipur,1706,6.82
+Location,Bhubaneswar,1704,6.82
+Location,Mangalore,1697,6.79
+Location,Delhi,1680,6.72
+Location,Ahmedabad,1677,6.71
+Location,Guwahati,1672,6.69
+Location,Chennai,1669,6.68
+Location,Kanpur,1664,6.66
+Location,Nagpur,1663,6.65
+Location,Mumbai,1658,6.63
+Location,Lucknow,1637,6.55
+Location,Pune,1622,6.49
+Location,Kolkata,1620,6.48
+Location,Surat,1589,6.36
+covered_by_any_other_company,N,17418,69.67
+covered_by_any_other_company,Y,7582,30.33
+Alcohol,Rare,13752,55.01
+Alcohol,No,8541,34.16
+Alcohol,Daily,2707,10.83
+exercise,Moderate,14638,58.55
+exercise,Extreme,5248,20.99
+exercise,No,5114,20.46

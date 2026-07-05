@@ -1,0 +1,7 @@
+column,q1,q3,iqr,lower_fence,upper_fence,outlier_count,outlier_pct
+bmi,26.1,35.6,9.5,11.85,49.85,549,2.29
+weight,64.0,78.0,14.0,43.0,99.0,0,0.0
+avg_glucose_level,113.0,222.0,109.0,-50.5,385.5,0,0.0
+daily_avg_steps,4543.0,5730.0,1187.0,2762.5,7510.5,952,3.81
+fat_percentage,21.0,36.0,15.0,-1.5,58.5,0,0.0
+insurance_cost,16042.0,37020.0,20978.0,-15425.0,68487.0,0,0.0

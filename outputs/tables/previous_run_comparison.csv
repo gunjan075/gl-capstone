@@ -1,0 +1,6 @@
+metric,before_model,after_model,before,after,absolute_improvement,pct_improvement
+test_MAE,HistGradientBoostingRegressor,BaseHistGradientBoostingRegressorAlt,2334.9731,2393.590187,-58.617087,-2.510397
+test_RMSE,HistGradientBoostingRegressor,BaseHistGradientBoostingRegressorAlt,2915.13,2982.441419,-67.311419,-2.309037
+test_MAPE,HistGradientBoostingRegressor,BaseHistGradientBoostingRegressorAlt,11.3391,11.693285,-0.354185,-3.123573
+test_SMAPE,HistGradientBoostingRegressor,BaseHistGradientBoostingRegressorAlt,10.9716,11.260173,-0.288573,-2.630185
+test_R2,HistGradientBoostingRegressor,BaseHistGradientBoostingRegressorAlt,0.9583,0.956493,-0.001807,-0.188596

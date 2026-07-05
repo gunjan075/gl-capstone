@@ -1,0 +1,6 @@
+original,cleaned_or_action,reason
+regular_checkup_lasy_year,regular_checkup_last_year,column typo normalized
+heart_decs_history,heart_disease_history,column typo normalized
+other_major_decs_history,other_major_disease_history,column typo normalized
+Occupation value: Salried,Salaried,category typo normalized
+applicant_id,dropped from modeling,"unique identifier, not predictive signal"

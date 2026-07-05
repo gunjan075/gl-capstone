@@ -1,0 +1,3 @@
+target_tail,customer_count,mean_cost,mean_age,mean_bmi,mean_glucose,mean_daily_steps,mean_medical_risk,mean_lifestyle_risk
+Bottom 1%,321,3655.87,45.25,31.83,165.97,5258.14,1.76,2.37
+Top 1%,264,64513.89,45.54,30.87,167.59,5211.67,2.2,2.29

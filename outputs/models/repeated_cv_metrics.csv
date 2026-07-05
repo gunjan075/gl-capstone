@@ -1,0 +1,8 @@
+model,repeated_cv_rmse_mean,repeated_cv_rmse_std,repeated_cv_mae_mean,repeated_cv_mae_std,folds,repeats
+WeightedBlendLightGBMEnhancedHGB,2946.7532,10.8584,2355.8973,13.7077,3,2
+WeightedBlendLightGBMBaseHGB,2947.075,10.6434,2356.7455,12.4123,3,2
+WeightedBlendBaseEnhancedHGB,2948.893,9.6252,2358.7848,10.6346,3,2
+TunedHistGradientBoostingRegressor,2951.3843,7.8816,2362.9056,9.0802,3,2
+BaseHistGradientBoostingRegressorAlt,2953.9308,9.1293,2367.0127,9.201,3,2
+HistGradientBoostingRegressor,2954.6054,8.0952,2365.3898,9.9104,3,2
+LightGBMRegressor,2963.2784,11.0904,2369.0562,13.5816,3,2

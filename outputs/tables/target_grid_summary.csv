@@ -1,0 +1,7 @@
+metric,value
+target_unique_count,54
+target_grid_step,1234
+target_min,2468
+target_max,67870
+first_10_levels,"2468, 3702, 4936, 6170, 7404, 8638, 9872, 11106, 12340, 13574"
+last_10_levels,"56764, 57998, 59232, 60466, 61700, 62934, 64168, 65402, 66636, 67870"

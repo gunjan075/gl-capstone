@@ -1,0 +1,5 @@
+risk_profile_segment,count,mean,median
+High medical,1366,27421.72,27148.0
+Lower combined risk,15432,27146.8,27148.0
+High lifestyle,7518,27129.62,27148.0
+High medical and lifestyle,684,26808.83,27148.0

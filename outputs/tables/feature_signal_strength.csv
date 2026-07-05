@@ -1,0 +1,17 @@
+feature,feature_type,target_mean_range,correlation_or_eta_squared,statistic_name,business_interpretation
+weight,numeric,46308.56,0.97036,absolute_correlation,strong observed signal
+Year_last_admitted,numeric_missing,36072.69,0.41503,eta_squared,strong observed signal
+years_since_last_admitted,numeric_engineered,30329.25,0.49017,absolute_correlation,strong observed signal
+weight_change_in_last_one_year,ordinal,24877.8,0.17994,eta_squared,strong observed signal
+regular_checkup_last_year,ordinal,8606.31,0.03354,eta_squared,strong observed signal
+adventure_sports,binary,3898.57,0.00556,eta_squared,strong observed signal
+covered_by_any_other_company,categorical,3166.6,0.01033,eta_squared,strong observed signal
+bmi_for_analysis,numeric,1072.59,0.00839,absolute_correlation,secondary signal; monitor with interactions
+cholesterol_midpoint,numeric,897.09,0.00021,eta_squared,weak marginal signal in this dataset
+age,numeric,792.72,0.0052,absolute_correlation,secondary signal; monitor with interactions
+avg_glucose_level,numeric,642.67,0.00501,absolute_correlation,secondary signal; monitor with interactions
+exercise,categorical,388.37,0.00012,eta_squared,weak marginal signal in this dataset
+smoking_status,categorical,312.31,8e-05,eta_squared,weak marginal signal in this dataset
+Alcohol,categorical,287.81,4e-05,eta_squared,weak marginal signal in this dataset
+other_major_disease_history,binary,109.19,1e-05,eta_squared,weak marginal signal in this dataset
+heart_disease_history,binary,28.04,0.0,eta_squared,weak marginal signal in this dataset

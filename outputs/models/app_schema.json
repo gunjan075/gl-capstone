@@ -1,0 +1,194 @@
+{
+  "numeric_ranges": {
+    "years_of_insurance_with_us": {
+      "min": 0.0,
+      "max": 8.0,
+      "median": 4.0
+    },
+    "regular_checkup_last_year": {
+      "min": 0.0,
+      "max": 5.0,
+      "median": 0.0
+    },
+    "adventure_sports": {
+      "min": 0.0,
+      "max": 1.0,
+      "median": 0.0
+    },
+    "visited_doctor_last_1_year": {
+      "min": 0.0,
+      "max": 12.0,
+      "median": 3.0
+    },
+    "daily_avg_steps": {
+      "min": 2034.0,
+      "max": 11255.0,
+      "median": 5089.0
+    },
+    "age": {
+      "min": 16.0,
+      "max": 74.0,
+      "median": 45.0
+    },
+    "heart_disease_history": {
+      "min": 0.0,
+      "max": 1.0,
+      "median": 0.0
+    },
+    "other_major_disease_history": {
+      "min": 0.0,
+      "max": 1.0,
+      "median": 0.0
+    },
+    "avg_glucose_level": {
+      "min": 57.0,
+      "max": 277.0,
+      "median": 168.0
+    },
+    "bmi": {
+      "min": 12.3,
+      "max": 100.6,
+      "median": 30.5
+    },
+    "weight": {
+      "min": 52.0,
+      "max": 96.0,
+      "median": 72.0
+    },
+    "weight_change_in_last_one_year": {
+      "min": 0.0,
+      "max": 6.0,
+      "median": 3.0
+    },
+    "fat_percentage": {
+      "min": 11.0,
+      "max": 42.0,
+      "median": 31.0
+    },
+    "Year_last_admitted": {
+      "min": 1990.0,
+      "max": 2018.0,
+      "median": 2004.0
+    }
+  },
+  "categorical_options": {
+    "Occupation": [
+      "Business",
+      "Salaried",
+      "Student"
+    ],
+    "Gender": [
+      "Female",
+      "Male"
+    ],
+    "smoking_status": [
+      "Unknown",
+      "formerly smoked",
+      "never smoked",
+      "smokes"
+    ],
+    "Location": [
+      "Ahmedabad",
+      "Bangalore",
+      "Bhubaneswar",
+      "Chennai",
+      "Delhi",
+      "Guwahati",
+      "Jaipur",
+      "Kanpur",
+      "Kolkata",
+      "Lucknow",
+      "Mangalore",
+      "Mumbai",
+      "Nagpur",
+      "Pune",
+      "Surat"
+    ],
+    "covered_by_any_other_company": [
+      "N",
+      "Y"
+    ],
+    "Alcohol": [
+      "Daily",
+      "No",
+      "Rare"
+    ],
+    "exercise": [
+      "Extreme",
+      "Moderate",
+      "No"
+    ],
+    "cholesterol_level": [
+      "125 to 150",
+      "150 to 175",
+      "175 to 200",
+      "200 to 225",
+      "225 to 250"
+    ]
+  },
+  "target_grid": {
+    "target_unique_count": 54,
+    "target_grid_step": 1234,
+    "target_min": 2468,
+    "target_max": 67870,
+    "valid_target_levels": [
+      2468,
+      3702,
+      4936,
+      6170,
+      7404,
+      8638,
+      9872,
+      11106,
+      12340,
+      13574,
+      14808,
+      16042,
+      17276,
+      18510,
+      19744,
+      20978,
+      22212,
+      23446,
+      24680,
+      25914,
+      27148,
+      28382,
+      29616,
+      30850,
+      32084,
+      33318,
+      34552,
+      35786,
+      37020,
+      38254,
+      39488,
+      40722,
+      41956,
+      43190,
+      44424,
+      45658,
+      46892,
+      48126,
+      49360,
+      50594,
+      51828,
+      53062,
+      54296,
+      55530,
+      56764,
+      57998,
+      59232,
+      60466,
+      61700,
+      62934,
+      64168,
+      65402,
+      66636,
+      67870
+    ]
+  },
+  "train_rows": 20000,
+  "target_median": 27148.0,
+  "schema_note": "Generated from training data/raw categorical levels; applicant_id is intentionally excluded from app input."
+}
