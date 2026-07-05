@@ -12,7 +12,7 @@ import subprocess
 import textwrap
 import warnings
 import zipfile
-from html import unescape
+from html import escape, unescape
 from pathlib import Path
 
 import joblib
@@ -111,6 +111,15 @@ PRIMARY = "#12355B"
 ACCENT = "#2A9D8F"
 WARN = "#E76F51"
 MUTED = "#6B7280"
+SECONDARY = "#457B9D"
+GOLD = "#E9C46A"
+GREEN = "#8AB17D"
+PLUM = "#6D597A"
+SKY = "#5DADE2"
+PLOT_BG = "#FBFCFE"
+GRID = "#E5E7EB"
+TEXT = "#1F2937"
+CHART_PALETTE = [ACCENT, SECONDARY, WARN, GOLD, GREEN, PLUM, SKY, "#F4A261"]
 
 
 def gpu_available() -> bool:
@@ -255,6 +264,51 @@ def write_csv(df: pd.DataFrame, name: str, index: bool = False) -> Path:
     path = TABLE_DIR / name
     df.to_csv(path, index=index)
     return path
+
+
+def set_visual_theme() -> None:
+    sns.set_theme(
+        style="whitegrid",
+        context="notebook",
+        font="DejaVu Sans",
+        rc={
+            "axes.facecolor": PLOT_BG,
+            "figure.facecolor": PLOT_BG,
+            "axes.edgecolor": GRID,
+            "axes.labelcolor": MUTED,
+            "axes.titlecolor": PRIMARY,
+            "axes.titleweight": "bold",
+            "grid.color": GRID,
+            "grid.linewidth": 0.7,
+            "grid.alpha": 0.75,
+            "xtick.color": TEXT,
+            "ytick.color": TEXT,
+            "text.color": TEXT,
+        },
+    )
+    sns.set_palette(CHART_PALETTE)
+
+
+def bar_palette(n: int) -> list[str]:
+    return [CHART_PALETTE[i % len(CHART_PALETTE)] for i in range(max(n, 1))]
+
+
+def style_current_figure() -> None:
+    fig = plt.gcf()
+    fig.patch.set_facecolor(PLOT_BG)
+    for ax in fig.axes:
+        ax.set_facecolor(PLOT_BG)
+        ax.title.set_fontweight("bold")
+        ax.title.set_color(PRIMARY)
+        ax.xaxis.label.set_color(MUTED)
+        ax.yaxis.label.set_color(MUTED)
+        ax.tick_params(axis="both", colors=TEXT, labelsize=8.5)
+        ax.grid(True, color=GRID, linewidth=0.7, alpha=0.75)
+        for side in ["top", "right"]:
+            ax.spines[side].set_visible(False)
+        for side in ["left", "bottom"]:
+            ax.spines[side].set_color(GRID)
+            ax.spines[side].set_linewidth(0.8)
 
 
 def target_grid_metadata(y: pd.Series) -> dict[str, object]:
@@ -789,6 +843,7 @@ def save_profile_tables(raw: pd.DataFrame, df: pd.DataFrame) -> dict[str, Path]:
 
 
 def savefig(path: Path) -> None:
+    style_current_figure()
     plt.tight_layout()
     plt.savefig(path, dpi=180, bbox_inches="tight")
     plt.close()
@@ -801,6 +856,7 @@ def safe_slug(value: object) -> str:
 
 def create_univariate_plot_set(raw: pd.DataFrame, df: pd.DataFrame) -> pd.DataFrame:
     """Create one univariate visual per original source variable with interpretation text."""
+    set_visual_theme()
     cleaned = clean_column_names(raw)
     variable_path = TABLE_DIR / "variable_type_classification.csv"
     if variable_path.exists():
@@ -841,7 +897,7 @@ def create_univariate_plot_set(raw: pd.DataFrame, df: pd.DataFrame) -> pd.DataFr
                 }
             )
             plt.figure(figsize=(7.2, 4.2))
-            sns.barplot(data=audit, x="check", y="count", color=ACCENT)
+            sns.barplot(data=audit, x="check", y="count", hue="check", palette=bar_palette(len(audit)), legend=False)
             plt.title("Univariate audit: applicant_id")
             plt.ylabel("Count")
             plot_type = "identifier audit bar chart"
@@ -856,7 +912,7 @@ def create_univariate_plot_set(raw: pd.DataFrame, df: pd.DataFrame) -> pd.DataFr
         elif clean_col == TARGET:
             values = pd.to_numeric(series, errors="coerce")
             plt.figure(figsize=(8.4, 4.8))
-            sns.histplot(values.dropna(), bins=35, kde=True, color=ACCENT)
+            sns.histplot(values.dropna(), bins=35, kde=True, color=SECONDARY)
             plt.title("Univariate distribution: insurance_cost")
             plt.xlabel("insurance_cost")
             plt.ylabel("Customers")
@@ -875,7 +931,7 @@ def create_univariate_plot_set(raw: pd.DataFrame, df: pd.DataFrame) -> pd.DataFr
             values = pd.to_numeric(series, errors="coerce")
             fig, axes = plt.subplots(1, 2, figsize=(10, 4.2), gridspec_kw={"width_ratios": [2, 1]})
             sns.histplot(values.dropna(), bins=30, kde=True, color=ACCENT, ax=axes[0])
-            sns.boxplot(y=values.dropna(), color="#F4A261", ax=axes[1])
+            sns.boxplot(y=values.dropna(), color=GOLD, ax=axes[1])
             axes[0].set_title(f"Distribution of {clean_col}")
             axes[1].set_title("Boxplot")
             axes[0].set_xlabel(clean_col)
@@ -899,7 +955,7 @@ def create_univariate_plot_set(raw: pd.DataFrame, df: pd.DataFrame) -> pd.DataFr
             counts = display_series.value_counts(dropna=False).head(20).reset_index()
             counts.columns = [clean_col, "customer_count"]
             plt.figure(figsize=(8.6, 4.8))
-            sns.barplot(data=counts, x=clean_col, y="customer_count", color=ACCENT)
+            sns.barplot(data=counts, x=clean_col, y="customer_count", hue=clean_col, palette=bar_palette(len(counts)), legend=False)
             plt.title(f"Univariate frequency: {clean_col}")
             plt.xlabel(clean_col)
             plt.ylabel("Customers")
@@ -939,14 +995,14 @@ def create_univariate_plot_set(raw: pd.DataFrame, df: pd.DataFrame) -> pd.DataFr
 
 
 def generate_eda_figures(raw: pd.DataFrame, df: pd.DataFrame) -> dict[str, Path]:
-    sns.set_theme(style="whitegrid")
+    set_visual_theme()
     figures: dict[str, Path] = {}
     univariate_index = create_univariate_plot_set(raw, df)
     for _, row in univariate_index.iterrows():
         figures[f"univariate_{safe_slug(row['clean_column'])}"] = ROOT / str(row["plot_file"])
 
     plt.figure(figsize=(8, 4.8))
-    sns.histplot(df[TARGET], kde=True, color=ACCENT, bins=35)
+    sns.histplot(df[TARGET], kde=True, color=SECONDARY, bins=35)
     plt.title("Distribution of Insurance Cost")
     plt.xlabel("Insurance cost")
     figures["target_distribution"] = FIG_DIR / "target_distribution.png"
@@ -955,7 +1011,7 @@ def generate_eda_figures(raw: pd.DataFrame, df: pd.DataFrame) -> dict[str, Path]
     target_frequency = raw[TARGET].value_counts().sort_index().reset_index()
     target_frequency.columns = [TARGET, "customer_count"]
     plt.figure(figsize=(10, 4.8))
-    plt.bar(target_frequency[TARGET].astype(str), target_frequency["customer_count"], color=ACCENT)
+    plt.bar(target_frequency[TARGET].astype(str), target_frequency["customer_count"], color=sns.color_palette("crest", len(target_frequency)))
     plt.title("Insurance Cost Price-Band Frequency")
     plt.xlabel("Insurance cost band")
     plt.ylabel("Customers")
@@ -964,7 +1020,7 @@ def generate_eda_figures(raw: pd.DataFrame, df: pd.DataFrame) -> dict[str, Path]
     savefig(figures["target_price_grid_frequency"])
 
     plt.figure(figsize=(7, 4))
-    sns.boxplot(x=df[TARGET], color="#F4A261")
+    sns.boxplot(x=df[TARGET], color=GOLD)
     plt.title("Insurance Cost Boxplot")
     figures["target_boxplot"] = FIG_DIR / "target_boxplot.png"
     savefig(figures["target_boxplot"])
@@ -972,7 +1028,7 @@ def generate_eda_figures(raw: pd.DataFrame, df: pd.DataFrame) -> dict[str, Path]
     missing = raw.isna().sum()
     missing = missing[missing > 0].sort_values(ascending=True)
     plt.figure(figsize=(7, 3.8))
-    plt.barh(missing.index, missing.values, color=WARN)
+    plt.barh(missing.index, missing.values, color=[WARN if i % 2 == 0 else GOLD for i in range(len(missing))])
     plt.title("Missing Values by Column")
     plt.xlabel("Missing rows")
     figures["missing_values"] = FIG_DIR / "missing_values.png"
@@ -994,7 +1050,7 @@ def generate_eda_figures(raw: pd.DataFrame, df: pd.DataFrame) -> dict[str, Path]
     ]
     corr = df[numeric_cols].corr(numeric_only=True)
     plt.figure(figsize=(10, 7))
-    sns.heatmap(corr, cmap="vlag", center=0, linewidths=0.2, annot=False)
+    sns.heatmap(corr, cmap="vlag", center=0, linewidths=0.35, linecolor="white", annot=False)
     plt.title("Correlation Heatmap")
     figures["correlation_heatmap"] = FIG_DIR / "correlation_heatmap.png"
     savefig(figures["correlation_heatmap"])
@@ -1033,7 +1089,7 @@ def generate_eda_figures(raw: pd.DataFrame, df: pd.DataFrame) -> dict[str, Path]
     )
     weight_band["weight_band"] = weight_band["weight_band"].astype(str)
     plt.figure(figsize=(9, 4.8))
-    sns.barplot(data=weight_band, x="weight_band", y="mean_cost", color=ACCENT)
+    sns.barplot(data=weight_band, x="weight_band", y="mean_cost", hue="weight_band", palette=sns.color_palette("crest", len(weight_band)), legend=False)
     plt.title("Average Insurance Cost by Weight Band")
     plt.ylabel("Mean insurance cost")
     plt.xticks(rotation=25, ha="right")
@@ -1063,7 +1119,7 @@ def generate_eda_figures(raw: pd.DataFrame, df: pd.DataFrame) -> dict[str, Path]
     for col, title, filename in boxplot_specs:
         plt.figure(figsize=(8, 4.8))
         order = df.groupby(col)[TARGET].median().sort_values().index.tolist()
-        sns.boxplot(data=df, x=col, y=TARGET, order=order, color="#A8DADC")
+        sns.boxplot(data=df, x=col, y=TARGET, order=order, hue=col, palette=bar_palette(len(order)), legend=False)
         plt.title(title)
         plt.xlabel(col)
         plt.ylabel("Insurance cost")
@@ -1079,7 +1135,7 @@ def generate_eda_figures(raw: pd.DataFrame, df: pd.DataFrame) -> dict[str, Path]
     for col, title, filename in ordinal_specs:
         summary = df.groupby(col, as_index=False)[TARGET].mean().sort_values(col)
         plt.figure(figsize=(7.5, 4.6))
-        sns.barplot(data=summary, x=col, y=TARGET, color=ACCENT)
+        sns.barplot(data=summary, x=col, y=TARGET, hue=col, palette=bar_palette(len(summary)), legend=False)
         plt.title(title)
         plt.ylabel("Mean insurance cost")
         key = filename.replace(".png", "")
@@ -1105,7 +1161,7 @@ def generate_eda_figures(raw: pd.DataFrame, df: pd.DataFrame) -> dict[str, Path]
         .sort_values("mean_cost", ascending=False)
     )
     plt.figure(figsize=(7.5, 4.6))
-    sns.barplot(data=admission_status, x="admission_status", y="mean_cost", color="#A8DADC")
+    sns.barplot(data=admission_status, x="admission_status", y="mean_cost", hue="admission_status", palette=bar_palette(len(admission_status)), legend=False)
     plt.title("Average Cost by Admission Status")
     plt.ylabel("Mean insurance cost")
     plt.xticks(rotation=15, ha="right")
@@ -1133,7 +1189,7 @@ def generate_eda_figures(raw: pd.DataFrame, df: pd.DataFrame) -> dict[str, Path]
         ]
     )
     plt.figure(figsize=(8.2, 4.8))
-    sns.barplot(data=missing_impact, x="missingness", y="mean_cost", color=WARN)
+    sns.barplot(data=missing_impact, x="missingness", y="mean_cost", hue="missingness", palette=[SECONDARY, GOLD, ACCENT, WARN], legend=False)
     plt.title("Target Impact of Missing BMI and Admission Year")
     plt.ylabel("Mean insurance cost")
     plt.xticks(rotation=20, ha="right")
@@ -1142,8 +1198,8 @@ def generate_eda_figures(raw: pd.DataFrame, df: pd.DataFrame) -> dict[str, Path]
 
     outlier_cols = ["bmi_for_analysis", "weight", "avg_glucose_level", "daily_avg_steps", "fat_percentage", TARGET]
     fig, axes = plt.subplots(2, 3, figsize=(13, 7))
-    for ax, col in zip(axes.ravel(), outlier_cols):
-        sns.boxplot(x=df[col], ax=ax, color="#DDE7C7")
+    for i, (ax, col) in enumerate(zip(axes.ravel(), outlier_cols)):
+        sns.boxplot(x=df[col], ax=ax, color=CHART_PALETTE[i % len(CHART_PALETTE)])
         ax.set_title(col)
     figures["outlier_boxplots"] = FIG_DIR / "outlier_boxplots.png"
     savefig(figures["outlier_boxplots"])
@@ -1157,7 +1213,7 @@ def generate_eda_figures(raw: pd.DataFrame, df: pd.DataFrame) -> dict[str, Path]
         lambda r: f"Heart {int(r['heart_disease_history'])}, Other {int(r['other_major_disease_history'])}", axis=1
     )
     plt.figure(figsize=(7.5, 4.5))
-    sns.barplot(data=disease_means, x="segment", y=TARGET, color=ACCENT)
+    sns.barplot(data=disease_means, x="segment", y=TARGET, hue="segment", palette=bar_palette(len(disease_means)), legend=False)
     plt.title("Average Cost by Disease-History Combination")
     plt.ylabel("Mean insurance cost")
     plt.xticks(rotation=20, ha="right")
@@ -1173,7 +1229,7 @@ def generate_eda_figures(raw: pd.DataFrame, df: pd.DataFrame) -> dict[str, Path]
         observed=False,
     )
     plt.figure(figsize=(8.5, 4.8))
-    sns.heatmap(age_bmi, annot=True, fmt=".0f", cmap="YlGnBu", linewidths=0.4)
+    sns.heatmap(age_bmi, annot=True, fmt=".0f", cmap="crest", linewidths=0.5, linecolor="white")
     plt.title("Average Cost by Age Band and BMI Category")
     plt.xlabel("BMI category")
     plt.ylabel("Age band")
@@ -1186,7 +1242,14 @@ def generate_eda_figures(raw: pd.DataFrame, df: pd.DataFrame) -> dict[str, Path]
         .reset_index()
     )
     plt.figure(figsize=(9, 5))
-    sns.lineplot(data=smoking_age, x="age_band", y=TARGET, hue="smoking_status", marker="o")
+    sns.lineplot(
+        data=smoking_age,
+        x="age_band",
+        y=TARGET,
+        hue="smoking_status",
+        marker="o",
+        palette=bar_palette(smoking_age["smoking_status"].nunique()),
+    )
     plt.title("Average Cost by Smoking Status Across Age Bands")
     plt.xlabel("Age band")
     plt.ylabel("Mean insurance cost")
@@ -1200,7 +1263,7 @@ def generate_eda_figures(raw: pd.DataFrame, df: pd.DataFrame) -> dict[str, Path]
         .reset_index()
     )
     plt.figure(figsize=(7.5, 4.8))
-    sns.barplot(data=risk_band, x="medical_risk_band", y=TARGET, hue="lifestyle_risk_band")
+    sns.barplot(data=risk_band, x="medical_risk_band", y=TARGET, hue="lifestyle_risk_band", palette=[SECONDARY, GOLD, ACCENT])
     plt.title("Average Cost by Medical and Lifestyle Risk Bands")
     plt.xlabel("Medical risk band")
     plt.ylabel("Mean insurance cost")
@@ -1418,7 +1481,7 @@ def save_calibration_artifacts(
             )
     curve_df = pd.DataFrame(curve_rows)
     plt.figure(figsize=(7.5, 5))
-    sns.lineplot(data=curve_df, x="mean_prediction", y="mean_actual", hue="variant", marker="o")
+    sns.lineplot(data=curve_df, x="mean_prediction", y="mean_actual", hue="variant", marker="o", palette=[SECONDARY, WARN])
     min_val = min(curve_df["mean_prediction"].min(), curve_df["mean_actual"].min())
     max_val = max(curve_df["mean_prediction"].max(), curve_df["mean_actual"].max())
     plt.plot([min_val, max_val], [min_val, max_val], linestyle="--", color=MUTED)
@@ -1447,7 +1510,7 @@ def save_calibration_artifacts(
     )
     write_csv(decile_residuals.round(4), "residual_by_cost_decile_calibration.csv")
     plt.figure(figsize=(8.5, 4.8))
-    sns.barplot(data=decile_residuals, x="actual_cost_decile", y="mean_residual", hue="variant")
+    sns.barplot(data=decile_residuals, x="actual_cost_decile", y="mean_residual", hue="variant", palette=[SECONDARY, WARN])
     plt.axhline(0, color=PRIMARY, linewidth=1)
     plt.title("Residual by Actual Cost Decile After Calibration")
     plt.xlabel("Actual cost decile")
@@ -1572,6 +1635,7 @@ def write_app_schema(raw: pd.DataFrame, X_train: pd.DataFrame, y_train: pd.Serie
 
 
 def build_models(raw: pd.DataFrame) -> dict[str, object]:
+    set_visual_theme()
     df = clean_column_names(raw)
     X = df.drop(columns=[TARGET, "applicant_id"], errors="ignore")
     y = df[TARGET]
@@ -2218,10 +2282,11 @@ def build_models(raw: pd.DataFrame) -> dict[str, object]:
 
 
 def generate_model_figures(metrics: pd.DataFrame, model, X_test: pd.DataFrame, y_test: pd.Series) -> dict[str, Path]:
+    set_visual_theme()
     figures: dict[str, Path] = {}
     plot_metrics = metrics.sort_values("test_RMSE", ascending=True)
     plt.figure(figsize=(10, 5.5))
-    sns.barplot(data=plot_metrics, y="model", x="test_RMSE", color=ACCENT)
+    sns.barplot(data=plot_metrics, y="model", x="test_RMSE", hue="model", palette=sns.color_palette("crest", len(plot_metrics)), legend=False)
     plt.title("Model Comparison by Test RMSE")
     plt.xlabel("Test RMSE")
     plt.ylabel("")
@@ -2230,7 +2295,7 @@ def generate_model_figures(metrics: pd.DataFrame, model, X_test: pd.DataFrame, y
 
     preds = model.predict(X_test)
     plt.figure(figsize=(6.5, 6))
-    sns.scatterplot(x=y_test, y=preds, alpha=0.35, s=16, color=PRIMARY)
+    sns.scatterplot(x=y_test, y=preds, alpha=0.35, s=16, color=SECONDARY)
     lims = [min(y_test.min(), preds.min()), max(y_test.max(), preds.max())]
     plt.plot(lims, lims, "--", color=WARN, linewidth=2)
     plt.title("Predicted vs Actual Insurance Cost")
@@ -2241,7 +2306,7 @@ def generate_model_figures(metrics: pd.DataFrame, model, X_test: pd.DataFrame, y
 
     residuals = y_test - preds
     plt.figure(figsize=(7, 4.5))
-    sns.scatterplot(x=preds, y=residuals, alpha=0.35, s=16, color=PRIMARY)
+    sns.scatterplot(x=preds, y=residuals, alpha=0.35, s=16, color=PLUM)
     plt.axhline(0, color=WARN, linestyle="--", linewidth=2)
     plt.title("Residuals vs Predicted Cost")
     plt.xlabel("Predicted cost")
@@ -2355,7 +2420,7 @@ def generate_model_figures(metrics: pd.DataFrame, model, X_test: pd.DataFrame, y
         cost_decile = segment_summary[segment_summary["segment_variable"] == "actual_cost_decile"].copy()
         if not cost_decile.empty:
             plt.figure(figsize=(8, 4.8))
-            sns.barplot(data=cost_decile, x="segment", y="MAE", color=ACCENT)
+            sns.barplot(data=cost_decile, x="segment", y="MAE", hue="segment", palette=sns.color_palette("crest", len(cost_decile)), legend=False)
             plt.title("Prediction Error by Actual Cost Decile")
             plt.xlabel("Actual cost decile")
             plt.ylabel("MAE")
@@ -2369,7 +2434,7 @@ def generate_model_figures(metrics: pd.DataFrame, model, X_test: pd.DataFrame, y
             plot_segments["label"] = plot_segments["segment_variable"] + ": " + plot_segments["segment"].astype(str)
             plot_segments = plot_segments.sort_values("MAE", ascending=False).head(14).iloc[::-1]
             plt.figure(figsize=(9.5, 5.4))
-            plt.barh(plot_segments["label"], plot_segments["MAE"], color=ACCENT)
+            plt.barh(plot_segments["label"], plot_segments["MAE"], color=bar_palette(len(plot_segments)))
             plt.title("Highest Segment-Level Prediction Error")
             plt.xlabel("MAE")
             figures["segment_error_mae"] = FIG_DIR / "segment_error_mae.png"
@@ -2382,7 +2447,7 @@ def generate_model_figures(metrics: pd.DataFrame, model, X_test: pd.DataFrame, y
             bias_segments["abs_bias"] = bias_segments["bias_predicted_minus_actual"].abs()
             bias_segments["label"] = bias_segments["segment_variable"] + ": " + bias_segments["segment"].astype(str)
             bias_segments = bias_segments.sort_values("abs_bias", ascending=False).head(12).iloc[::-1]
-            colors = np.where(bias_segments["bias_predicted_minus_actual"] >= 0, ACCENT, WARN)
+            colors = np.where(bias_segments["bias_predicted_minus_actual"] >= 0, SECONDARY, WARN)
             plt.figure(figsize=(9.5, 5.2))
             plt.barh(bias_segments["label"], bias_segments["bias_predicted_minus_actual"], color=colors)
             plt.axvline(0, color="#111827", linewidth=1)
@@ -2394,6 +2459,7 @@ def generate_model_figures(metrics: pd.DataFrame, model, X_test: pd.DataFrame, y
 
 
 def generate_importance(model, X_test: pd.DataFrame, y_test: pd.Series) -> pd.DataFrame:
+    set_visual_theme()
     sample_size = min(2500, len(X_test))
     X_sample = X_test.sample(sample_size, random_state=RANDOM_STATE)
     y_sample = y_test.loc[X_sample.index]
@@ -2423,7 +2489,7 @@ def generate_importance(model, X_test: pd.DataFrame, y_test: pd.Series) -> pd.Da
 
     plt.figure(figsize=(8, 5.2))
     top = importance.head(12).iloc[::-1]
-    plt.barh(top["feature"], top["importance_mean"], color=ACCENT)
+    plt.barh(top["feature"], top["importance_mean"], color=sns.color_palette("crest", len(top)))
     plt.title("Top Drivers by Permutation Importance")
     plt.xlabel("Increase in RMSE when shuffled")
     savefig(FIG_DIR / "feature_importance.png")
@@ -2482,7 +2548,7 @@ def generate_shap_explainability(fitted: dict[str, object], X_test: pd.DataFrame
         shutil.copy2(TABLE_DIR / "shap_importance.csv", MODEL_DIR / "shap_importance.csv")
         plt.figure(figsize=(8, 5.2))
         top = shap_importance.head(12).iloc[::-1]
-        plt.barh(top["feature"], top["mean_abs_shap"], color=PRIMARY)
+        plt.barh(top["feature"], top["mean_abs_shap"], color=sns.color_palette("mako", len(top)))
         plt.title(f"SHAP Importance for {candidate_name}")
         plt.xlabel("Mean absolute SHAP value")
         savefig(FIG_DIR / "shap_importance_bar.png")
@@ -3470,13 +3536,139 @@ def create_notebooks() -> list[Path]:
     def code(source: str):
         return nbf.v4.new_code_cell(textwrap.dedent(source).strip())
 
+    notebook_css = f"""
+    <style>
+    body, .jp-Notebook {{
+        background: #F8FAFC;
+        color: {TEXT};
+        font-family: Inter, Segoe UI, Arial, sans-serif;
+    }}
+    h1 {{
+        color: {PRIMARY};
+        font-size: 2.15rem;
+        font-weight: 800;
+        letter-spacing: 0;
+        padding: 0.55rem 0 0.35rem;
+        border-bottom: 4px solid {ACCENT};
+    }}
+    h2 {{
+        color: {PRIMARY};
+        font-size: 1.45rem;
+        font-weight: 760;
+        letter-spacing: 0;
+        margin-top: 1.45rem;
+        padding: 0.35rem 0 0.35rem 0.7rem;
+        border-left: 5px solid {ACCENT};
+        background: linear-gradient(90deg, #E8F4F1 0%, rgba(232,244,241,0) 78%);
+        border-radius: 6px;
+    }}
+    h3 {{
+        color: {SECONDARY};
+        font-size: 1.12rem;
+        font-weight: 720;
+        margin-top: 1.1rem;
+    }}
+    p, li {{
+        font-size: 0.98rem;
+        line-height: 1.58;
+    }}
+    div.insight-card {{
+        background: #FFFFFF;
+        border: 1px solid #D9E6EF;
+        border-left: 5px solid {ACCENT};
+        border-radius: 8px;
+        box-shadow: 0 6px 18px rgba(18, 53, 91, 0.08);
+        margin: 0.85rem 0 1.05rem;
+        padding: 0.95rem 1.05rem;
+    }}
+    div.insight-row {{
+        display: flex;
+        gap: 0.65rem;
+        align-items: flex-start;
+        margin: 0.25rem 0;
+    }}
+    span.insight-label {{
+        border-radius: 999px;
+        color: #FFFFFF;
+        display: inline-block;
+        font-size: 0.74rem;
+        font-weight: 760;
+        letter-spacing: 0;
+        min-width: 5.25rem;
+        padding: 0.18rem 0.55rem;
+        text-align: center;
+    }}
+    span.insight-label.tech {{ background: {PRIMARY}; }}
+    span.insight-label.biz {{ background: {ACCENT}; }}
+    span.insight-label.caution {{ background: {WARN}; }}
+    div.output_png img, img {{
+        background: #FFFFFF;
+        border: 1px solid #DDE7F0;
+        border-radius: 8px;
+        box-shadow: 0 8px 24px rgba(18, 53, 91, 0.10);
+        padding: 6px;
+    }}
+    table.dataframe {{
+        border-collapse: collapse;
+        border: 1px solid #D9E6EF;
+        border-radius: 8px;
+        box-shadow: 0 4px 14px rgba(18, 53, 91, 0.06);
+        overflow: hidden;
+    }}
+    table.dataframe thead tr {{
+        background: {PRIMARY};
+        color: #FFFFFF;
+    }}
+    table.dataframe th, table.dataframe td {{
+        border: 1px solid #E5E7EB;
+        padding: 0.42rem 0.55rem;
+        font-size: 0.86rem;
+    }}
+    table.dataframe tbody tr:nth-child(even) {{
+        background: #F3F8FA;
+    }}
+    div.input_area {{
+        border-radius: 8px;
+        border: 1px solid #D9E6EF;
+    }}
+    code {{
+        color: {PRIMARY};
+    }}
+    </style>
+    """
+
+    def style_cell():
+        return code(
+            f"""
+            from IPython.display import HTML, display
+            display(HTML({notebook_css!r}))
+            """
+        )
+
     def interp(technical: str, business: str, caution: str | None = None):
-        caution_text = f"\n\n**Caution:** {caution}" if caution else ""
+        caution_row = (
+            f"""
+            <div class="insight-row">
+                <span class="insight-label caution">Caution</span>
+                <span>{escape(caution)}</span>
+            </div>
+            """
+            if caution
+            else ""
+        )
         return md(
             f"""
-            **Technical interpretation:** {technical}
-
-            **Business interpretation:** {business}{caution_text}
+            <div class="insight-card">
+                <div class="insight-row">
+                    <span class="insight-label tech">Technical</span>
+                    <span>{escape(technical)}</span>
+                </div>
+                <div class="insight-row">
+                    <span class="insight-label biz">Business</span>
+                    <span>{escape(business)}</span>
+                </div>
+                {caution_row}
+            </div>
             """
         )
 
@@ -3499,6 +3691,7 @@ def create_notebooks() -> list[Path]:
 
     m1_cells = [
         md("# Milestone 1: Insurance Price Prediction - Data Report, EDA, and Preprocessing"),
+        style_cell(),
         md(
             """
             ## 1. Project Context and Business Objective
@@ -3537,6 +3730,7 @@ def create_notebooks() -> list[Path]:
                 ensure_dirs,
                 generate_eda_figures,
                 save_profile_tables,
+                set_visual_theme,
                 summarize_eda,
                 write_milestone1_rubric_coverage_matrix,
             )
@@ -3547,7 +3741,7 @@ def create_notebooks() -> list[Path]:
             REPORT_DIR = ROOT / "outputs" / "reports"
 
             ensure_dirs()
-            sns.set_theme(style="whitegrid")
+            set_visual_theme()
             pd.set_option("display.max_columns", 80)
             pd.set_option("display.width", 140)
             print(ROOT)
@@ -3959,6 +4153,7 @@ def create_notebooks() -> list[Path]:
 
     m2_cells = [
         md("# Milestone 2: Insurance Price Prediction - Modeling, Explainability, and Deployment"),
+        style_cell(),
         md(
             """
             ## 1. Modeling Objective
@@ -3990,6 +4185,7 @@ def create_notebooks() -> list[Path]:
                 ensure_dirs,
                 generate_eda_figures,
                 save_profile_tables,
+                set_visual_theme,
                 write_streamlit_app,
             )
 
@@ -3998,6 +4194,7 @@ def create_notebooks() -> list[Path]:
             MODEL_DIR = ROOT / "outputs" / "models"
 
             ensure_dirs()
+            set_visual_theme()
             pd.set_option("display.max_columns", 80)
             """
         ),
@@ -4304,7 +4501,7 @@ def execute_and_export_notebooks(notebook_paths: list[Path]) -> list[Path]:
         notebook = nbf.read(nb_path, as_version=4)
         client = NotebookClient(
             notebook,
-            timeout=900,
+            timeout=1800,
             kernel_name="python3",
             resources={"metadata": {"path": str(ROOT)}},
         )
@@ -4908,8 +5105,8 @@ def notebook_quality_summary(notebook_paths: list[Path]) -> dict[str, object]:
         notebook = nbf.read(path, as_version=4)
         sources = "\n".join(str(cell.get("source", "")) for cell in notebook.cells)
         cell_count = len(notebook.cells)
-        tech_count = sources.count("Technical interpretation:")
-        business_count = sources.count("Business interpretation:")
+        tech_count = sources.count("Technical interpretation:") + sources.count("insight-label tech")
+        business_count = sources.count("Business interpretation:") + sources.count("insight-label biz")
         if path.name.startswith("01_"):
             passes = cell_count >= 45 and tech_count >= 30 and business_count >= 30
         else:

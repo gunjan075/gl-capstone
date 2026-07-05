@@ -176,14 +176,14 @@
     "notebook_quality": {
       "01_milestone1_eda.ipynb": {
         "exists": true,
-        "cell_count": 160,
+        "cell_count": 161,
         "technical_interpretation_count": 68,
         "business_interpretation_count": 68,
         "passes_threshold": true
       },
       "02_milestone2_modeling.ipynb": {
         "exists": true,
-        "cell_count": 65,
+        "cell_count": 66,
         "technical_interpretation_count": 21,
         "business_interpretation_count": 21,
         "passes_threshold": true
@@ -247,5 +247,15 @@
     "milestone1": "Regenerates EDA tables, figures, preprocessing evidence, and univariate plots from Insurance Data.csv before analysis cells.",
     "milestone2": "Retrains model suite and regenerates split checks, metrics, calibration, quote-band evaluation, explainability, final model, and Streamlit app from Insurance Data.csv before analysis cells.",
     "pre_generated_outputs_required": false
+  },
+  "notebook_visual_style": {
+    "styled_html": true,
+    "insight_cards": true,
+    "styled_tables": true,
+    "styled_chart_theme": true,
+    "chart_contact_sheets": [
+      "outputs/reports/chart_style_contact_sheet.png",
+      "outputs/reports/model_chart_style_contact_sheet.png"
+    ]
   }
 }

@@ -50,14 +50,14 @@
   "notebook_quality": {
     "01_milestone1_eda.ipynb": {
       "exists": true,
-      "cell_count": 160,
+      "cell_count": 161,
       "technical_interpretation_count": 68,
       "business_interpretation_count": 68,
       "passes_threshold": true
     },
     "02_milestone2_modeling.ipynb": {
       "exists": true,
-      "cell_count": 65,
+      "cell_count": 66,
       "technical_interpretation_count": 21,
       "business_interpretation_count": 21,
       "passes_threshold": true
