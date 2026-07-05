@@ -794,9 +794,156 @@ def savefig(path: Path) -> None:
     plt.close()
 
 
+def safe_slug(value: object) -> str:
+    slug = re.sub(r"[^A-Za-z0-9]+", "_", str(value)).strip("_").lower()
+    return slug or "field"
+
+
+def create_univariate_plot_set(raw: pd.DataFrame, df: pd.DataFrame) -> pd.DataFrame:
+    """Create one univariate visual per original source variable with interpretation text."""
+    cleaned = clean_column_names(raw)
+    variable_path = TABLE_DIR / "variable_type_classification.csv"
+    if variable_path.exists():
+        variable_types = pd.read_csv(variable_path)
+    else:
+        variable_types = pd.DataFrame(
+            {
+                "original_column": raw.columns,
+                "clean_column": cleaned.columns,
+                "analysis_type": ["unknown"] * len(raw.columns),
+                "role": ["predictor"] * len(raw.columns),
+                "preprocessing_action": ["document and validate"] * len(raw.columns),
+            }
+        )
+
+    rows: list[dict[str, object]] = []
+    for _, meta in variable_types.iterrows():
+        original_col = str(meta["original_column"])
+        clean_col = str(meta["clean_column"])
+        analysis_type = str(meta.get("analysis_type", "unknown"))
+        role = str(meta.get("role", "predictor"))
+        action = str(meta.get("preprocessing_action", "document and validate"))
+        source_col = clean_col if clean_col in cleaned.columns else original_col
+        if source_col not in cleaned.columns:
+            continue
+        series = cleaned[source_col]
+        missing_count = int(series.isna().sum())
+        unique_count = int(series.nunique(dropna=True))
+        filename = f"univariate_{safe_slug(clean_col)}.png"
+        path = FIG_DIR / filename
+
+        if clean_col == "applicant_id":
+            duplicate_ids = int(series.duplicated().sum())
+            audit = pd.DataFrame(
+                {
+                    "check": ["Rows", "Unique IDs", "Duplicate IDs"],
+                    "count": [int(len(series)), unique_count, duplicate_ids],
+                }
+            )
+            plt.figure(figsize=(7.2, 4.2))
+            sns.barplot(data=audit, x="check", y="count", color=ACCENT)
+            plt.title("Univariate audit: applicant_id")
+            plt.ylabel("Count")
+            plot_type = "identifier audit bar chart"
+            technical = (
+                f"`{clean_col}` has {unique_count:,} unique values across {len(series):,} rows "
+                f"and {duplicate_ids:,} duplicate ID values."
+            )
+            business = (
+                "The field is useful for audit traceability only and is excluded from modeling and app input "
+                "because an identifier does not generalize to new applicants."
+            )
+        elif clean_col == TARGET:
+            values = pd.to_numeric(series, errors="coerce")
+            plt.figure(figsize=(8.4, 4.8))
+            sns.histplot(values.dropna(), bins=35, kde=True, color=ACCENT)
+            plt.title("Univariate distribution: insurance_cost")
+            plt.xlabel("insurance_cost")
+            plt.ylabel("Customers")
+            plot_type = "target histogram with KDE"
+            grid_meta = target_grid_metadata(values)
+            technical = (
+                f"`{clean_col}` ranges from {values.min():,.0f} to {values.max():,.0f}, "
+                f"has {grid_meta['target_unique_count']} unique quote bands, and a grid step of "
+                f"{grid_meta['target_grid_step']:,}."
+            )
+            business = (
+                "This is the prediction target; it behaves like a fixed quote-band grid, so deployment should "
+                "show both raw prediction and nearest valid quote band."
+            )
+        elif pd.api.types.is_numeric_dtype(series) and unique_count > 20 and clean_col != "Year_last_admitted":
+            values = pd.to_numeric(series, errors="coerce")
+            fig, axes = plt.subplots(1, 2, figsize=(10, 4.2), gridspec_kw={"width_ratios": [2, 1]})
+            sns.histplot(values.dropna(), bins=30, kde=True, color=ACCENT, ax=axes[0])
+            sns.boxplot(y=values.dropna(), color="#F4A261", ax=axes[1])
+            axes[0].set_title(f"Distribution of {clean_col}")
+            axes[1].set_title("Boxplot")
+            axes[0].set_xlabel(clean_col)
+            axes[1].set_ylabel(clean_col)
+            plot_type = "histogram and boxplot"
+            technical = (
+                f"`{clean_col}` is numeric with {unique_count:,} unique values, median "
+                f"{values.median():,.2f}, range {values.min():,.2f} to {values.max():,.2f}, "
+                f"and {missing_count:,} missing values."
+            )
+            business = (
+                f"The distribution documents the applicant spread for `{clean_col}` before modeling; "
+                f"the preprocessing action is: {action}."
+            )
+        else:
+            if clean_col == "Year_last_admitted":
+                display_series = pd.to_numeric(series, errors="coerce").astype("Int64").astype("object")
+                display_series = display_series.fillna("Missing/no known admission").astype(str)
+            else:
+                display_series = series.astype("object").where(series.notna(), "Missing").astype(str)
+            counts = display_series.value_counts(dropna=False).head(20).reset_index()
+            counts.columns = [clean_col, "customer_count"]
+            plt.figure(figsize=(8.6, 4.8))
+            sns.barplot(data=counts, x=clean_col, y="customer_count", color=ACCENT)
+            plt.title(f"Univariate frequency: {clean_col}")
+            plt.xlabel(clean_col)
+            plt.ylabel("Customers")
+            plt.xticks(rotation=30, ha="right")
+            plot_type = "frequency bar chart"
+            top_category = str(counts.iloc[0][clean_col]) if len(counts) else "not available"
+            top_count = int(counts.iloc[0]["customer_count"]) if len(counts) else 0
+            top_pct = top_count / len(series) * 100 if len(series) else 0
+            technical = (
+                f"`{clean_col}` has {unique_count:,} non-missing levels and {missing_count:,} missing values; "
+                f"the most frequent level is `{top_category}` at {top_pct:.1f}% of rows."
+            )
+            business = (
+                f"The frequency view checks whether `{clean_col}` is balanced enough for EDA and downstream encoding; "
+                f"the preprocessing action is: {action}."
+            )
+
+        savefig(path)
+        rows.append(
+            {
+                "original_column": original_col,
+                "clean_column": clean_col,
+                "analysis_type": analysis_type,
+                "role": role,
+                "plot_type": plot_type,
+                "plot_file": rel_path(path),
+                "unique_count": unique_count,
+                "missing_count": missing_count,
+                "technical_interpretation": technical,
+                "business_interpretation": business,
+            }
+        )
+
+    index = pd.DataFrame(rows)
+    write_csv(index, "univariate_plot_interpretations.csv")
+    return index
+
+
 def generate_eda_figures(raw: pd.DataFrame, df: pd.DataFrame) -> dict[str, Path]:
     sns.set_theme(style="whitegrid")
     figures: dict[str, Path] = {}
+    univariate_index = create_univariate_plot_set(raw, df)
+    for _, row in univariate_index.iterrows():
+        figures[f"univariate_{safe_slug(row['clean_column'])}"] = ROOT / str(row["plot_file"])
 
     plt.figure(figsize=(8, 4.8))
     sns.histplot(df[TARGET], kde=True, color=ACCENT, bins=35)
@@ -2551,18 +2698,18 @@ def write_milestone1_rubric_coverage_matrix() -> Path:
             "rubric_section": "Initial EDA",
             "marks": "10 marks",
             "rubric_requirement": "Univariate analysis for numeric variables with distribution and spread.",
-            "evidence_in_milestone1_docx": "Initial EDA target distribution, boxplot, outlier review, and numeric summaries.",
-            "evidence_in_notebook": "Univariate Analysis: Numeric Variables section.",
-            "evidence_file_or_chart": "outputs/tables/numeric_summary.csv; outputs/figures/target_distribution.png; outputs/figures/outlier_boxplots.png",
+            "evidence_in_milestone1_docx": "Initial EDA target distribution, boxplot, outlier review, numeric summaries, and complete univariate appendix.",
+            "evidence_in_notebook": "Univariate Analysis sections plus complete univariate plot appendix.",
+            "evidence_file_or_chart": "outputs/tables/numeric_summary.csv; outputs/tables/univariate_plot_interpretations.csv; outputs/figures/univariate_*.png",
             "status": "covered",
         },
         {
             "rubric_section": "Initial EDA",
             "marks": "10 marks",
             "rubric_requirement": "Categorical distribution for categorical, binary, and ordinal variables.",
-            "evidence_in_milestone1_docx": "Initial EDA and appendix group summaries.",
-            "evidence_in_notebook": "Univariate Analysis: Categorical, Binary, and Ordinal Variables section.",
-            "evidence_file_or_chart": "outputs/tables/categorical_frequency.csv; outputs/tables/group_summary_*.csv",
+            "evidence_in_milestone1_docx": "Initial EDA, appendix group summaries, and complete univariate appendix.",
+            "evidence_in_notebook": "Univariate categorical section plus complete univariate plot appendix.",
+            "evidence_file_or_chart": "outputs/tables/categorical_frequency.csv; outputs/tables/group_summary_*.csv; outputs/figures/univariate_*.png",
             "status": "covered",
         },
         {
@@ -2753,6 +2900,7 @@ def generate_milestone1_report(
             "Other-company coverage, admission history, regular checkups, weight change, and adventure sports are stronger observed categorical or ordinal signals than smoking, alcohol, exercise, and disease-history flags.",
             "No duplicate applicant records were detected.",
             "Unknown smoking status is treated as a valid business category rather than a missing value.",
+            "A complete univariate plot appendix is included for every original source variable, with technical and business interpretation for each plot.",
         ],
     )
 
@@ -2856,6 +3004,36 @@ def generate_milestone1_report(
     )
 
     doc.add_heading("Appendix", level=1)
+    doc.add_heading("Complete Univariate Plot Appendix", level=2)
+    univariate_index = pd.read_csv(TABLE_DIR / "univariate_plot_interpretations.csv")
+    add_doc_table(
+        doc,
+        univariate_index[
+            [
+                "original_column",
+                "clean_column",
+                "analysis_type",
+                "plot_type",
+                "missing_count",
+                "unique_count",
+            ]
+        ],
+        max_rows=30,
+        font_size=5.8,
+    )
+    for _, row in univariate_index.iterrows():
+        clean_col = str(row["clean_column"])
+        doc.add_heading(f"Univariate plot: {clean_col}", level=3)
+        plot_path = ROOT / Path(*str(row["plot_file"]).split("/"))
+        add_picture_with_interpretations(
+            doc,
+            plot_path,
+            f"Univariate distribution or frequency for {clean_col}.",
+            str(row["technical_interpretation"]),
+            str(row["business_interpretation"]),
+            width=5.8,
+        )
+
     doc.add_heading("Selected Group Summaries", level=2)
     for column in ["covered_by_any_other_company", "regular_checkup_last_year", "weight_change_in_last_one_year", "admission_status", "smoking_status", "exercise", "Alcohol", "bmi_category"]:
         table = pd.read_csv(TABLE_DIR / f"group_summary_{column}.csv")
@@ -3729,6 +3907,31 @@ def create_notebooks() -> list[Path]:
         ("Categorical frequencies confirm all major categories have enough representation for EDA.", "The reviewer can trust that segment comparisons are not purely anecdotal."),
         ("The preprocessing table ties each transformation to a data-quality or modeling-readiness reason.", "This makes the project easier to grade against the Milestone 1 rubric."),
     ]
+    univariate_path = TABLE_DIR / "univariate_plot_interpretations.csv"
+    if univariate_path.exists():
+        univariate_rows = pd.read_csv(univariate_path)
+        m1_cells.extend(
+            [
+                md("### Complete Univariate Plot Appendix for All Original Variables"),
+                code(
+                    """
+                    univariate_index = pd.read_csv(TABLE_DIR / "univariate_plot_interpretations.csv")
+                    display(univariate_index[[
+                        "original_column", "clean_column", "analysis_type", "plot_type",
+                        "missing_count", "unique_count", "plot_file"
+                    ]])
+                    """
+                ),
+                interp(
+                    "This appendix provides one generated univariate plot for every original source variable, including identifiers, target, numeric fields, ordinal fields, binary flags, and nominal categories.",
+                    "The reviewer can verify that no variable was skipped in the initial EDA; high-signal variables receive deeper bivariate treatment elsewhere in the notebook.",
+                ),
+            ]
+        )
+        for _, row in univariate_rows.iterrows():
+            clean_col = str(row["clean_column"])
+            m1_cells.append(image_cell(str(row["plot_file"]), f"Univariate plot: {clean_col}"))
+            m1_cells.append(interp(str(row["technical_interpretation"]), str(row["business_interpretation"])))
     for technical, business in extra_m1_interpretations:
         m1_cells.append(interp(technical, business))
 
@@ -4651,6 +4854,27 @@ def rubric_matrix_quality() -> dict[str, object]:
     }
 
 
+def univariate_plot_quality() -> dict[str, object]:
+    path = TABLE_DIR / "univariate_plot_interpretations.csv"
+    if not path.exists():
+        return {"exists": False, "all_plots_exist": False}
+    index = pd.read_csv(path)
+    plot_exists = []
+    for plot_file in index["plot_file"].astype(str):
+        plot_exists.append((ROOT / Path(*plot_file.split("/"))).exists())
+    return {
+        "exists": True,
+        "row_count": int(len(index)),
+        "all_plots_exist": bool(all(plot_exists)),
+        "technical_interpretation_count": int(index["technical_interpretation"].notna().sum()),
+        "business_interpretation_count": int(index["business_interpretation"].notna().sum()),
+        "all_rows_have_interpretations": bool(
+            index["technical_interpretation"].astype(str).str.len().gt(0).all()
+            and index["business_interpretation"].astype(str).str.len().gt(0).all()
+        ),
+    }
+
+
 def unlocked_output_path(path: Path) -> Path:
     """Return a nearby fallback path when an Office file is open/locked."""
     return path.with_name(f"{path.stem}_updated{path.suffix}")
@@ -4696,6 +4920,7 @@ def run_smoke_checks(
         "notebook_html": {},
         "docx_interpretation_counts": {},
         "rubric_matrix": {},
+        "univariate_plots": {},
     }
     for code_path in [ROOT / "run_all.py", ROOT / "insurance_modeling.py", ROOT / "app.py"]:
         try:
@@ -4721,6 +4946,7 @@ def run_smoke_checks(
             "passes_threshold": bool(technical_count >= 20 and business_count >= 20),
         }
     summary["rubric_matrix"] = rubric_matrix_quality()
+    summary["univariate_plots"] = univariate_plot_quality()
 
     try:
         model = joblib.load(MODEL_DIR / "final_model.pkl")
@@ -4778,6 +5004,7 @@ def main() -> None:
         TABLE_DIR / "target_grid_summary.csv",
         TABLE_DIR / "feature_signal_strength.csv",
         tables["variable_type_classification"],
+        TABLE_DIR / "univariate_plot_interpretations.csv",
         rubric_path,
         *notebooks,
         *notebook_html,

@@ -6,7 +6,8 @@
       "Data Pre-processing": true,
       "Extensive Exploratory Data Analysis": true,
       "Technical interpretation:": true,
-      "Business interpretation:": true
+      "Business interpretation:": true,
+      "Complete Univariate Plot Appendix": true
     },
     "Milestone_2_Insurance_Price_Prediction.docx": {
       "Milestone 2 Submission": true,
@@ -150,6 +151,7 @@
       "outputs/tables/target_grid_summary.csv": true,
       "outputs/tables/feature_signal_strength.csv": true,
       "outputs/tables/variable_type_classification.csv": true,
+      "outputs/tables/univariate_plot_interpretations.csv": true,
       "outputs/reports/milestone1_rubric_coverage_matrix.csv": true,
       "notebooks/01_milestone1_eda.ipynb": true,
       "notebooks/02_milestone2_modeling.ipynb": true,
@@ -173,9 +175,9 @@
     "notebook_quality": {
       "01_milestone1_eda.ipynb": {
         "exists": true,
-        "cell_count": 109,
-        "technical_interpretation_count": 43,
-        "business_interpretation_count": 43,
+        "cell_count": 160,
+        "technical_interpretation_count": 68,
+        "business_interpretation_count": 68,
         "passes_threshold": true
       },
       "02_milestone2_modeling.ipynb": {
@@ -195,8 +197,8 @@
     "docx_interpretation_counts": {
       "Milestone_1_Insurance_Price_Prediction.docx": {
         "actual_file": "Milestone_1_Insurance_Price_Prediction.docx",
-        "technical_interpretation_count": 22,
-        "business_interpretation_count": 22,
+        "technical_interpretation_count": 46,
+        "business_interpretation_count": 46,
         "passes_threshold": true
       }
     },
@@ -211,6 +213,14 @@
         "Extensive EDA",
         "Initial EDA"
       ]
+    },
+    "univariate_plots": {
+      "exists": true,
+      "row_count": 24,
+      "all_plots_exist": true,
+      "technical_interpretation_count": 24,
+      "business_interpretation_count": 24,
+      "all_rows_have_interpretations": true
     }
   },
   "artifacts": {
@@ -228,6 +238,7 @@
     "requirements": "requirements.txt",
     "readme": "README.md",
     "final_model": "outputs/models/final_model.pkl",
-    "milestone1_rubric_coverage_matrix": "outputs/reports/milestone1_rubric_coverage_matrix.csv"
+    "milestone1_rubric_coverage_matrix": "outputs/reports/milestone1_rubric_coverage_matrix.csv",
+    "univariate_plot_interpretations": "outputs/tables/univariate_plot_interpretations.csv"
   }
 }
