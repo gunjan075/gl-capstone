@@ -174,14 +174,14 @@
     "notebook_quality": {
       "01_milestone1_eda.ipynb": {
         "exists": true,
-        "cell_count": 162,
+        "cell_count": 167,
         "technical_interpretation_count": 74,
         "business_interpretation_count": 74,
         "passes_threshold": true
       },
       "02_milestone2_modeling.ipynb": {
         "exists": true,
-        "cell_count": 67,
+        "cell_count": 72,
         "technical_interpretation_count": 27,
         "business_interpretation_count": 27,
         "passes_threshold": true
@@ -191,34 +191,36 @@
       "01_milestone1_eda.ipynb": {
         "exists": true,
         "self_contained": true,
-        "embedded_helper_cell_count": 1,
-        "visible_external_project_import_counts": {
+        "visible_helper_source_cell_count": 2,
+        "analysis_external_project_import_counts": {
           "from run_all import": 0,
           "import run_all": 0,
           "from insurance_modeling import": 0,
           "sys.path.insert": 0
         },
-        "embedded_helper_input_hidden_in_html": true,
+        "helper_definitions_present": true,
+        "helper_source_visible_in_notebook": true,
         "required_input_files": [
           "Insurance Data.csv"
         ],
-        "note": "Helper source is embedded in the notebook; visible analysis cells do not import local project scripts."
+        "note": "Helper definitions are visible code cells in the notebook; analysis cells do not import local project scripts."
       },
       "02_milestone2_modeling.ipynb": {
         "exists": true,
         "self_contained": true,
-        "embedded_helper_cell_count": 1,
-        "visible_external_project_import_counts": {
+        "visible_helper_source_cell_count": 2,
+        "analysis_external_project_import_counts": {
           "from run_all import": 0,
           "import run_all": 0,
           "from insurance_modeling import": 0,
           "sys.path.insert": 0
         },
-        "embedded_helper_input_hidden_in_html": true,
+        "helper_definitions_present": true,
+        "helper_source_visible_in_notebook": true,
         "required_input_files": [
           "Insurance Data.csv"
         ],
-        "note": "Helper source is embedded in the notebook; visible analysis cells do not import local project scripts."
+        "note": "Helper definitions are visible code cells in the notebook; analysis cells do not import local project scripts."
       }
     },
     "notebook_warning_outputs": {
@@ -326,39 +328,41 @@
     "01_milestone1_eda.ipynb": {
       "exists": true,
       "self_contained": true,
-      "embedded_helper_cell_count": 1,
-      "visible_external_project_import_counts": {
+      "visible_helper_source_cell_count": 2,
+      "analysis_external_project_import_counts": {
         "from run_all import": 0,
         "import run_all": 0,
         "from insurance_modeling import": 0,
         "sys.path.insert": 0
       },
-      "embedded_helper_input_hidden_in_html": true,
+      "helper_definitions_present": true,
+      "helper_source_visible_in_notebook": true,
       "required_input_files": [
         "Insurance Data.csv"
       ],
-      "note": "Helper source is embedded in the notebook; visible analysis cells do not import local project scripts."
+      "note": "Helper definitions are visible code cells in the notebook; analysis cells do not import local project scripts."
     },
     "02_milestone2_modeling.ipynb": {
       "exists": true,
       "self_contained": true,
-      "embedded_helper_cell_count": 1,
-      "visible_external_project_import_counts": {
+      "visible_helper_source_cell_count": 2,
+      "analysis_external_project_import_counts": {
         "from run_all import": 0,
         "import run_all": 0,
         "from insurance_modeling import": 0,
         "sys.path.insert": 0
       },
-      "embedded_helper_input_hidden_in_html": true,
+      "helper_definitions_present": true,
+      "helper_source_visible_in_notebook": true,
       "required_input_files": [
         "Insurance Data.csv"
       ],
-      "note": "Helper source is embedded in the notebook; visible analysis cells do not import local project scripts."
+      "note": "Helper definitions are visible code cells in the notebook; analysis cells do not import local project scripts."
     }
   },
   "notebook_isolation_check": {
     "status": "passed",
-    "method": "Executed startup/bootstrap cells in outputs/tmp_self_contained_check with only each notebook and Insurance Data.csv present; verified run_all.py and insurance_modeling.py were absent.",
+    "method": "Executed startup/helper-definition cells in outputs/tmp_self_contained_check with only each notebook and Insurance Data.csv present; verified run_all.py and insurance_modeling.py were absent and save_profile_tables/build_models/clean_column_names were callable.",
     "checked_notebooks": [
       "01_milestone1_eda.ipynb",
       "02_milestone2_modeling.ipynb"

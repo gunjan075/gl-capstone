@@ -3605,6 +3605,50 @@ def embedded_notebook_bootstrap_source() -> str:
     """
 
 
+def notebook_insurance_modeling_source() -> str:
+    source = (ROOT / "insurance_modeling.py").read_text(encoding="utf-8")
+    module_registration = f"""
+
+    # Register these visible notebook definitions under the original module name.
+    # This keeps saved sklearn/joblib artifacts loadable without an external .py file.
+    import sys
+    import types
+
+    _insurance_module = types.ModuleType("insurance_modeling")
+    InsuranceFeatureEngineer.__module__ = "insurance_modeling"
+    for _name in {NOTEBOOK_INSURANCE_EXPORTS!r} + [
+        "BASE_CATEGORICAL_FEATURES",
+        "BASE_NUMERIC_FEATURES",
+        "CATEGORICAL_FEATURES",
+        "COLUMN_RENAMES",
+        "NUMERIC_FEATURES",
+        "cholesterol_to_midpoint",
+        "evaluate_regression",
+        "make_age_band",
+        "make_bmi_category",
+        "make_model_pipeline",
+    ]:
+        setattr(_insurance_module, _name, globals()[_name])
+    sys.modules["insurance_modeling"] = _insurance_module
+    """
+    return source.rstrip() + "\n" + textwrap.dedent(module_registration).strip()
+
+
+def notebook_run_all_source() -> str:
+    source = (ROOT / "run_all.py").read_text(encoding="utf-8")
+    source = source.replace(
+        'ROOT = Path(__file__).resolve().parent',
+        'ROOT = Path.cwd()\nif not (ROOT / "Insurance Data.csv").exists():\n    ROOT = ROOT.parent',
+        1,
+    )
+    source = re.sub(
+        r'\n\nif __name__ == "__main__":\n    main\(\)\s*$',
+        '\n\n# main() is intentionally not called inside the notebook.\n',
+        source,
+    )
+    return source.rstrip()
+
+
 def create_notebooks() -> list[Path]:
     def md(text: str):
         return nbf.v4.new_markdown_cell(textwrap.dedent(text).strip())
@@ -3787,8 +3831,20 @@ def create_notebooks() -> list[Path]:
             "Milestone 1 is treated as the analytical foundation: data quality, target behavior, missingness, and important relationships are documented before model fitting.",
             "A pricing model is only useful if reviewers can see why the data is usable, what the target means, and which applicant characteristics drive the estimate.",
         ),
-        md("## 2. Import Libraries and Set Paths"),
-        code(embedded_notebook_bootstrap_source(), tags=["embedded-helper-code", "remove-input"]),
+        md("## 2. Embedded Helper Definitions and Runtime Setup"),
+        md(
+            """
+            The next two code cells contain the full helper definitions used by this notebook.
+            They replace external dependencies on `insurance_modeling.py` and `run_all.py`,
+            so functions such as `save_profile_tables()` and `generate_eda_figures()` are
+            visible and executable directly in the notebook.
+            """
+        ),
+        md("### 2.1 Model and preprocessing definitions"),
+        code(notebook_insurance_modeling_source(), tags=["notebook-helper-source"]),
+        md("### 2.2 EDA/report helper definitions"),
+        code(notebook_run_all_source(), tags=["notebook-helper-source"]),
+        md("### 2.3 Import Libraries and Set Paths"),
         code(
             """
             import json
@@ -3817,7 +3873,7 @@ def create_notebooks() -> list[Path]:
             """
         ),
         interp(
-            "The notebook resolves the project root, creates output folders, and loads embedded helper functions directly from notebook cells.",
+            "The notebook resolves the project root, creates output folders, and uses helper functions defined in visible notebook code cells.",
             "A reviewer can execute the notebook from the supplied dataset without needing pre-generated EDA tables, figures, or external helper scripts.",
         ),
         md("## 3. End-to-End EDA Artifact Generation"),
@@ -4240,7 +4296,19 @@ def create_notebooks() -> list[Path]:
             calibration behavior, explainability outputs, and Streamlit deployment artifacts.
             """
         ),
-        code(embedded_notebook_bootstrap_source(), tags=["embedded-helper-code", "remove-input"]),
+        md("## Embedded Helper Definitions and Runtime Setup"),
+        md(
+            """
+            The next two code cells contain the full helper definitions used by this notebook.
+            They replace external dependencies on `insurance_modeling.py` and `run_all.py`,
+            so functions such as `build_models()`, `save_profile_tables()`, and
+            `write_streamlit_app()` are visible and executable directly in the notebook.
+            """
+        ),
+        md("### Model and preprocessing definitions"),
+        code(notebook_insurance_modeling_source(), tags=["notebook-helper-source"]),
+        md("### Modeling, EDA, and deployment helper definitions"),
+        code(notebook_run_all_source(), tags=["notebook-helper-source"]),
         code(
             """
             import json
@@ -4265,7 +4333,7 @@ def create_notebooks() -> list[Path]:
             """
         ),
         interp(
-            "The modeling notebook resolves the project root, creates output folders, and uses training/deployment helpers embedded in the notebook.",
+            "The modeling notebook resolves the project root, creates output folders, and uses training/deployment helpers defined in visible notebook code cells.",
             "A reviewer can execute the notebook from `Insurance Data.csv` without relying on external helper scripts or pre-generated model outputs.",
         ),
         md("## 2. End-to-End Modeling Artifact Generation"),
@@ -5195,27 +5263,25 @@ def notebook_self_contained_summary(notebook_paths: list[Path]) -> dict[str, obj
             summary[path.name] = {"exists": False, "self_contained": False}
             continue
         notebook = nbf.read(path, as_version=4)
-        embedded_cells = [cell for cell in notebook.cells if "embedded-helper-code" in cell.metadata.get("tags", [])]
-        visible_cells = [cell for cell in notebook.cells if "embedded-helper-code" not in cell.metadata.get("tags", [])]
-        visible_source = "\n".join(str(cell.get("source", "")) for cell in visible_cells)
-        pattern_counts = {pattern: visible_source.count(pattern) for pattern in patterns}
-        helper_cells_hidden = bool(
-            embedded_cells
-            and all(
-                "remove-input" in cell.metadata.get("tags", [])
-                and bool(cell.metadata.get("jupyter", {}).get("source_hidden"))
-                for cell in embedded_cells
-            )
+        helper_cells = [cell for cell in notebook.cells if "notebook-helper-source" in cell.metadata.get("tags", [])]
+        analysis_cells = [cell for cell in notebook.cells if "notebook-helper-source" not in cell.metadata.get("tags", [])]
+        analysis_source = "\n".join(str(cell.get("source", "")) for cell in analysis_cells)
+        helper_source = "\n".join(str(cell.get("source", "")) for cell in helper_cells)
+        analysis_pattern_counts = {pattern: analysis_source.count(pattern) for pattern in patterns}
+        helper_definitions_present = all(
+            required in helper_source
+            for required in ["def save_profile_tables", "def generate_eda_figures", "def build_models", "class InsuranceFeatureEngineer"]
         )
-        self_contained = bool(embedded_cells and sum(pattern_counts.values()) == 0)
+        self_contained = bool(helper_cells and helper_definitions_present and sum(analysis_pattern_counts.values()) == 0)
         summary[path.name] = {
             "exists": True,
             "self_contained": self_contained,
-            "embedded_helper_cell_count": len(embedded_cells),
-            "visible_external_project_import_counts": pattern_counts,
-            "embedded_helper_input_hidden_in_html": helper_cells_hidden,
+            "visible_helper_source_cell_count": len(helper_cells),
+            "analysis_external_project_import_counts": analysis_pattern_counts,
+            "helper_definitions_present": helper_definitions_present,
+            "helper_source_visible_in_notebook": bool(helper_cells),
             "required_input_files": ["Insurance Data.csv"],
-            "note": "Helper source is embedded in the notebook; visible analysis cells do not import local project scripts.",
+            "note": "Helper definitions are visible code cells in the notebook; analysis cells do not import local project scripts.",
         }
     return summary
 
