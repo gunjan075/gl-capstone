@@ -257,5 +257,15 @@
       "outputs/reports/chart_style_contact_sheet.png",
       "outputs/reports/model_chart_style_contact_sheet.png"
     ]
+  },
+  "notebook_warning_outputs": {
+    "01_milestone1_eda.ipynb": {
+      "warning_output_count": 0,
+      "warnings": []
+    },
+    "02_milestone2_modeling.ipynb": {
+      "warning_output_count": 0,
+      "warnings": []
+    }
   }
 }

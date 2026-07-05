@@ -3798,7 +3798,12 @@ def create_notebooks() -> list[Path]:
         code(
             """
             display(raw_df.describe().T)
-            display(raw_df.describe(include="object").T)
+            categorical_like_cols = [
+                col for col in raw_df.columns
+                if not pd.api.types.is_numeric_dtype(raw_df[col])
+            ]
+            if categorical_like_cols:
+                display(raw_df[categorical_like_cols].describe().T)
             display(raw_df.nunique().sort_values())
             display(raw_df.isna().sum().sort_values(ascending=False))
             print("Duplicate rows:", raw_df.duplicated().sum())
@@ -3852,7 +3857,10 @@ def create_notebooks() -> list[Path]:
         md("## 8. Dataset Profile and Descriptive Statistics"),
         code(
             """
-            categorical_cols = raw_df.select_dtypes(include=["object"]).columns.tolist()
+            categorical_cols = [
+                col for col in raw_df.columns
+                if not pd.api.types.is_numeric_dtype(raw_df[col])
+            ]
             cat_rows = []
             for col in categorical_cols:
                 for category, count in raw_df[col].value_counts(dropna=False).items():
