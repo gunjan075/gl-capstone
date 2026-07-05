@@ -135,6 +135,7 @@
       "Milestone_2_Insurance_Price_Prediction.docx": true,
       "Insurance_Price_Prediction_Final_Presentation.pptx": true,
       "app.py": true,
+      "README.md": true,
       "outputs/models/final_model.pkl": true,
       "outputs/models/model_metrics.csv": true,
       "outputs/models/final_model_summary.csv": true,
@@ -182,9 +183,9 @@
       },
       "02_milestone2_modeling.ipynb": {
         "exists": true,
-        "cell_count": 62,
-        "technical_interpretation_count": 20,
-        "business_interpretation_count": 20,
+        "cell_count": 65,
+        "technical_interpretation_count": 21,
+        "business_interpretation_count": 21,
         "passes_threshold": true
       }
     },
@@ -241,5 +242,10 @@
     "milestone1_rubric_coverage_matrix": "outputs/reports/milestone1_rubric_coverage_matrix.csv",
     "univariate_plot_interpretations": "outputs/tables/univariate_plot_interpretations.csv"
   },
-  "notebook_split_check_note": "Milestone 2 notebook reconstructs target_band_split_check.csv from the stratified train/test split and verifies it matches the saved artifact."
+  "notebook_split_check_note": "Milestone 2 notebook reconstructs target_band_split_check.csv from the stratified train/test split and verifies it matches the saved artifact.",
+  "notebook_execution_mode": {
+    "milestone1": "Regenerates EDA tables, figures, preprocessing evidence, and univariate plots from Insurance Data.csv before analysis cells.",
+    "milestone2": "Retrains model suite and regenerates split checks, metrics, calibration, quote-band evaluation, explainability, final model, and Streamlit app from Insurance Data.csv before analysis cells.",
+    "pre_generated_outputs_required": false
+  }
 }

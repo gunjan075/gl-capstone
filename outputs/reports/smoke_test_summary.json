@@ -9,6 +9,7 @@
     "Milestone_2_Insurance_Price_Prediction.docx": true,
     "Insurance_Price_Prediction_Final_Presentation.pptx": true,
     "app.py": true,
+    "README.md": true,
     "outputs/models/final_model.pkl": true,
     "outputs/models/model_metrics.csv": true,
     "outputs/models/final_model_summary.csv": true,
@@ -56,9 +57,9 @@
     },
     "02_milestone2_modeling.ipynb": {
       "exists": true,
-      "cell_count": 62,
-      "technical_interpretation_count": 20,
-      "business_interpretation_count": 20,
+      "cell_count": 65,
+      "technical_interpretation_count": 21,
+      "business_interpretation_count": 21,
       "passes_threshold": true
     }
   },

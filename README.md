@@ -18,7 +18,14 @@ The target is a discrete business quote grid. The pipeline reports raw regressio
 
 ## Notebooks and HTML exports
 
-`python run_all.py` regenerates the full notebooks and executed HTML exports:
+The submitted notebooks are executable end to end from `Insurance Data.csv`:
+
+- Run `notebooks/01_milestone1_eda.ipynb` to recreate Milestone 1 EDA tables, figures, preprocessing evidence, and interpretations from the raw dataset.
+- Run `notebooks/02_milestone2_modeling.ipynb` to recreate the train/test split, model training/comparison, calibration, quote-band evaluation, explainability artifacts, saved model, and Streamlit app from the raw dataset.
+
+Milestone 2 runs the full model suite and may take several minutes on CPU. The notebooks do not require pre-generated output files; they create the required `outputs/` artifacts during execution.
+
+`python run_all.py` can still be used to regenerate the full package plus executed HTML exports:
 
 - `notebooks/01_milestone1_eda.ipynb`
 - `notebooks/01_milestone1_eda.html`
