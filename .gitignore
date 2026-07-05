@@ -9,3 +9,21 @@ outputs/presentation_workspace/
 outputs/reports/docx_render_*/
 *.zip
 *_updated.docx
+
+
+# Python / uv
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Node
+frontend/node_modules/
+frontend/dist/
+
+# Model artifacts (regenerate with `uv run python -m insurance.train`)
+models/*.pkl
+
+# OS
+.DS_Store
