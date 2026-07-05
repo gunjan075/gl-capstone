@@ -1,6 +1,9 @@
 Metric,Value
-Rows,25000
-Columns,24
-Cells,600000
-Duplicate rows,0
-Unique applicant_id,25000
+Rows,25000.0
+Columns,24.0
+Cells,600000.0
+Duplicate rows,0.0
+Unique applicant_id,25000.0
+Target mean,27147.41
+Target median,27148.0
+Target skew,0.332

@@ -7511,7 +7511,7 @@ a.anchor-link {
 <!-- End of mermaid configuration --></head>
 <body class="jp-Notebook" data-jp-theme-light="true" data-jp-theme-name="JupyterLab Light">
 <main>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=e1b89121">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=cc0cf96b">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7521,7 +7521,7 @@ a.anchor-link {
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=6f88ba8f">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=b07642f1">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7646,7 +7646,7 @@ a.anchor-link {
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=699ec40b">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=2b6bc173">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7658,16 +7658,29 @@ calibration behavior, explainability outputs, and Streamlit deployment artifacts
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=80032914">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell celltag_embedded-helper-code celltag_remove-input" id="cell-id=d4608e80">
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>Embedded helper code loaded from notebook; no external .py helper scripts required.
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=962ccf9b">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [2]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [3]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">joblib</span>
@@ -7678,17 +7691,6 @@ calibration behavior, explainability outputs, and Streamlit deployment artifacts
 <span class="n">ROOT</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span>
 <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">ROOT</span> <span class="o">/</span> <span class="s2">"Insurance Data.csv"</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
     <span class="n">ROOT</span> <span class="o">=</span> <span class="n">ROOT</span><span class="o">.</span><span class="n">parent</span>
-<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">ROOT</span><span class="p">))</span>
-
-<span class="kn">from</span><span class="w"> </span><span class="nn">run_all</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
-    <span class="n">add_report_features</span><span class="p">,</span>
-    <span class="n">build_models</span><span class="p">,</span>
-    <span class="n">ensure_dirs</span><span class="p">,</span>
-    <span class="n">generate_eda_figures</span><span class="p">,</span>
-    <span class="n">save_profile_tables</span><span class="p">,</span>
-    <span class="n">set_visual_theme</span><span class="p">,</span>
-    <span class="n">write_streamlit_app</span><span class="p">,</span>
-<span class="p">)</span>
 
 <span class="n">TABLE_DIR</span> <span class="o">=</span> <span class="n">ROOT</span> <span class="o">/</span> <span class="s2">"outputs"</span> <span class="o">/</span> <span class="s2">"tables"</span>
 <span class="n">FIG_DIR</span> <span class="o">=</span> <span class="n">ROOT</span> <span class="o">/</span> <span class="s2">"outputs"</span> <span class="o">/</span> <span class="s2">"figures"</span>
@@ -7703,7 +7705,7 @@ calibration behavior, explainability outputs, and Streamlit deployment artifacts
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=f114943b">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=78bf092e">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7712,18 +7714,18 @@ calibration behavior, explainability outputs, and Streamlit deployment artifacts
 <div class="insight-card">
 <div class="insight-row">
 <span class="insight-label tech">Technical</span>
-<span>The modeling notebook resolves the project root, creates output folders, and imports the training/deployment helpers.</span>
+<span>The modeling notebook resolves the project root, creates output folders, and uses training/deployment helpers embedded in the notebook.</span>
 </div>
 <div class="insight-row">
 <span class="insight-label biz">Business</span>
-<span>A reviewer can execute the notebook from `Insurance Data.csv` without relying on pre-generated model outputs.</span>
+<span>A reviewer can execute the notebook from `Insurance Data.csv` without relying on external helper scripts or pre-generated model outputs.</span>
 </div>
 </div>
 </div>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=9da7b2a2">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=5a67cd66">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7733,12 +7735,12 @@ calibration behavior, explainability outputs, and Streamlit deployment artifacts
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=18c2982c">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=3aa8913d">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [3]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [4]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">DATA_PATH</span> <span class="o">=</span> <span class="n">ROOT</span> <span class="o">/</span> <span class="s2">"Insurance Data.csv"</span>
@@ -8002,7 +8004,7 @@ Streamlit app artifact: app.py
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=87e96153">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c053c489">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8022,7 +8024,7 @@ Streamlit app artifact: app.py
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=a5e65d43">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=030792a1">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8032,18 +8034,15 @@ Streamlit app artifact: app.py
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=2c0696c1">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=fe0f9adc">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [4]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [5]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">train_test_split</span>
-
-<span class="kn">from</span><span class="w"> </span><span class="nn">insurance_modeling</span><span class="w"> </span><span class="kn">import</span> <span class="n">clean_column_names</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">run_all</span><span class="w"> </span><span class="kn">import</span> <span class="n">RANDOM_STATE</span><span class="p">,</span> <span class="n">TARGET</span><span class="p">,</span> <span class="n">make_target_strata</span><span class="p">,</span> <span class="n">target_grid_metadata</span>
 
 <span class="n">raw_model_df</span> <span class="o">=</span> <span class="n">clean_column_names</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">ROOT</span> <span class="o">/</span> <span class="s2">"Insurance Data.csv"</span><span class="p">))</span>
 <span class="n">X</span> <span class="o">=</span> <span class="n">raw_model_df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="n">TARGET</span><span class="p">,</span> <span class="s2">"applicant_id"</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s2">"ignore"</span><span class="p">)</span>
@@ -8245,7 +8244,7 @@ Streamlit app artifact: app.py
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=23b01d2e">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=85563a93">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8265,7 +8264,7 @@ Streamlit app artifact: app.py
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=0e3bab04">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b4191b87">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8275,12 +8274,12 @@ Streamlit app artifact: app.py
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=7abe1d26">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=04eecae3">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [5]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [6]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">metrics</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">MODEL_DIR</span> <span class="o">/</span> <span class="s2">"model_metrics.csv"</span><span class="p">)</span>
@@ -8295,7 +8294,7 @@ Streamlit app artifact: app.py
 </div>
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[5]:</div>
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[6]:</div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
 <div>
 <style scoped="">
@@ -8530,7 +8529,7 @@ Streamlit app artifact: app.py
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=3c8b29f8">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=a832b7ce">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8550,7 +8549,7 @@ Streamlit app artifact: app.py
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=a8e8e8fe">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=63c575cb">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8560,12 +8559,12 @@ Streamlit app artifact: app.py
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=e11bee7b">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=43485eac">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [6]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [7]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">metrics</span><span class="p">[</span><span class="n">metrics</span><span class="p">[</span><span class="s2">"model"</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">([</span><span class="s2">"DummyRegressor"</span><span class="p">,</span> <span class="s2">"LinearRegression"</span><span class="p">,</span> <span class="s2">"Ridge"</span><span class="p">,</span> <span class="s2">"LogTargetRidge"</span><span class="p">])][</span>
@@ -8581,7 +8580,7 @@ Streamlit app artifact: app.py
 </div>
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[6]:</div>
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[7]:</div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
 <div>
 <style scoped="">
@@ -8644,7 +8643,7 @@ Streamlit app artifact: app.py
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=03670395">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b596405d">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8664,7 +8663,7 @@ Streamlit app artifact: app.py
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=e6ffc70b">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=f987300d">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8674,12 +8673,12 @@ Streamlit app artifact: app.py
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=9c12317d">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=d95a140c">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [7]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [8]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">tree_metrics</span> <span class="o">=</span> <span class="n">metrics</span><span class="p">[</span><span class="o">~</span><span class="n">metrics</span><span class="p">[</span><span class="s2">"model"</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">([</span><span class="s2">"DummyRegressor"</span><span class="p">,</span> <span class="s2">"LinearRegression"</span><span class="p">,</span> <span class="s2">"Ridge"</span><span class="p">,</span> <span class="s2">"LogTargetRidge"</span><span class="p">])]</span>
@@ -8694,7 +8693,7 @@ Streamlit app artifact: app.py
 </div>
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[7]:</div>
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[8]:</div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
 <div>
 <style scoped="">
@@ -8892,12 +8891,12 @@ Streamlit app artifact: app.py
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=fafadf00">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=464078af">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [8]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [9]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">image_path</span> <span class="o">=</span> <span class="n">ROOT</span> <span class="o">/</span> <span class="s1">'outputs/figures/model_comparison_rmse.png'</span>
@@ -8930,7 +8929,7 @@ Streamlit app artifact: app.py
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=1bb5e94a">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=fb98e4d4">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8950,7 +8949,7 @@ Streamlit app artifact: app.py
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=dc135c21">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b6aee7d5">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8960,12 +8959,12 @@ Streamlit app artifact: app.py
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=2e62ca3d">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=aff470ff">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [9]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [10]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">metadata</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">((</span><span class="n">MODEL_DIR</span> <span class="o">/</span> <span class="s2">"model_metadata.json"</span><span class="p">)</span><span class="o">.</span><span class="n">read_text</span><span class="p">())</span>
@@ -9566,7 +9565,7 @@ Streamlit app artifact: app.py
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=68e2398a">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=4ac319c2">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9586,7 +9585,7 @@ Streamlit app artifact: app.py
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=90d4c2ef">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=5f2bfae4">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9596,12 +9595,12 @@ Streamlit app artifact: app.py
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=92d084c4">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=13582b42">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [10]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [11]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">repeated_cv</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">MODEL_DIR</span> <span class="o">/</span> <span class="s2">"repeated_cv_metrics.csv"</span><span class="p">)</span>
@@ -9616,7 +9615,7 @@ Streamlit app artifact: app.py
 </div>
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[10]:</div>
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[11]:</div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
 <div>
 <style scoped="">
@@ -9724,7 +9723,7 @@ Streamlit app artifact: app.py
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=e703e707">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=42a01e1f">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9744,7 +9743,7 @@ Streamlit app artifact: app.py
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=460d9338">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=6da6d9f8">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9754,12 +9753,12 @@ Streamlit app artifact: app.py
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=a17ae19a">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=6e2d2fd9">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [11]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [12]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">price_grid_eval</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">MODEL_DIR</span> <span class="o">/</span> <span class="s2">"price_grid_evaluation.csv"</span><span class="p">)</span>
@@ -9969,12 +9968,12 @@ Streamlit app artifact: app.py
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=c551a9a7">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=9b326f83">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [12]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [13]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">image_path</span> <span class="o">=</span> <span class="n">ROOT</span> <span class="o">/</span> <span class="s1">'outputs/figures/calibration_curve.png'</span>
@@ -10006,12 +10005,12 @@ Streamlit app artifact: app.py
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=84d3d456">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=79ab17bf">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [13]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [14]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">image_path</span> <span class="o">=</span> <span class="n">ROOT</span> <span class="o">/</span> <span class="s1">'outputs/figures/residual_by_cost_decile_after_calibration.png'</span>
@@ -10044,7 +10043,7 @@ Streamlit app artifact: app.py
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=2523a727">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=0b9e5844">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -10064,7 +10063,7 @@ Streamlit app artifact: app.py
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=1ca2e7a0">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=482cace4">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -10084,7 +10083,7 @@ Streamlit app artifact: app.py
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=ccbe4380">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=14cb837c">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -10094,12 +10093,12 @@ Streamlit app artifact: app.py
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=7c9b500e">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=de4d1aaf">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [14]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [15]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">ordinal</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">MODEL_DIR</span> <span class="o">/</span> <span class="s2">"ordinal_challenger_metrics.csv"</span><span class="p">)</span>
@@ -10114,7 +10113,7 @@ Streamlit app artifact: app.py
 </div>
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[14]:</div>
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[15]:</div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
 <div>
 <style scoped="">
@@ -10184,7 +10183,7 @@ Streamlit app artifact: app.py
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b267c75d">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=720996ba">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -10204,7 +10203,7 @@ Streamlit app artifact: app.py
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=8ce95b90">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=181b6e41">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -10214,17 +10213,15 @@ Streamlit app artifact: app.py
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=112da595">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=5a5f052e">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [15]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [16]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">insurance_modeling</span><span class="w"> </span><span class="kn">import</span> <span class="n">clean_column_names</span>
-
-<span class="n">model</span> <span class="o">=</span> <span class="n">joblib</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">MODEL_DIR</span> <span class="o">/</span> <span class="s2">"final_model.pkl"</span><span class="p">)</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">joblib</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">MODEL_DIR</span> <span class="o">/</span> <span class="s2">"final_model.pkl"</span><span class="p">)</span>
 <span class="n">raw_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">ROOT</span> <span class="o">/</span> <span class="s2">"Insurance Data.csv"</span><span class="p">)</span>
 <span class="n">sample</span> <span class="o">=</span> <span class="n">clean_column_names</span><span class="p">(</span><span class="n">raw_df</span><span class="p">)</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">"insurance_cost"</span><span class="p">,</span> <span class="s2">"applicant_id"</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s2">"ignore"</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
 <span class="n">preds</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">sample</span><span class="p">)</span>
@@ -10239,7 +10236,7 @@ Streamlit app artifact: app.py
 </div>
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[15]:</div>
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[16]:</div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
 <div>
 <style scoped="">
@@ -10291,7 +10288,7 @@ Streamlit app artifact: app.py
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b6657fd2">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c7a4ddee">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -10311,7 +10308,7 @@ Streamlit app artifact: app.py
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=25fb6288">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b1c43cfb">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -10321,12 +10318,12 @@ Streamlit app artifact: app.py
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=c53a45fb">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=1048ffe8">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [16]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [17]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">importance</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">MODEL_DIR</span> <span class="o">/</span> <span class="s2">"feature_importance.csv"</span><span class="p">)</span>
@@ -10341,7 +10338,7 @@ Streamlit app artifact: app.py
 </div>
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[16]:</div>
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[17]:</div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
 <div>
 <style scoped="">
@@ -10464,12 +10461,12 @@ Streamlit app artifact: app.py
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=5b16875f">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=f99a4bf5">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [17]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [18]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">image_path</span> <span class="o">=</span> <span class="n">ROOT</span> <span class="o">/</span> <span class="s1">'outputs/figures/feature_importance.png'</span>
@@ -10502,7 +10499,7 @@ Streamlit app artifact: app.py
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b681f69e">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=273a0581">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -10522,7 +10519,7 @@ Streamlit app artifact: app.py
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=007ffe03">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=69bd35fe">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -10532,12 +10529,12 @@ Streamlit app artifact: app.py
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=01211df3">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=5043837c">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [18]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [19]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">shap_status</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">((</span><span class="n">MODEL_DIR</span> <span class="o">/</span> <span class="s2">"shap_status.json"</span><span class="p">)</span><span class="o">.</span><span class="n">read_text</span><span class="p">())</span>
@@ -10673,12 +10670,12 @@ Streamlit app artifact: app.py
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=c3e323cd">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=6d8a606d">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [19]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [20]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">image_path</span> <span class="o">=</span> <span class="n">ROOT</span> <span class="o">/</span> <span class="s1">'outputs/figures/shap_importance_bar.png'</span>
@@ -10710,12 +10707,12 @@ Streamlit app artifact: app.py
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=85b33572">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=b27e0e27">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [20]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [21]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">image_path</span> <span class="o">=</span> <span class="n">ROOT</span> <span class="o">/</span> <span class="s1">'outputs/figures/partial_dependence_top_features.png'</span>
@@ -10748,7 +10745,7 @@ Streamlit app artifact: app.py
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=be632cdf">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=ade4479d">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -10768,7 +10765,7 @@ Streamlit app artifact: app.py
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=859150d7">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b9acf280">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -10778,12 +10775,12 @@ Streamlit app artifact: app.py
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=a05777e0">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=0b5ec2e9">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [21]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [22]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">app_schema</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">((</span><span class="n">MODEL_DIR</span> <span class="o">/</span> <span class="s2">"app_schema.json"</span><span class="p">)</span><span class="o">.</span><span class="n">read_text</span><span class="p">())</span>
@@ -10798,7 +10795,7 @@ Streamlit app artifact: app.py
 </div>
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[21]:</div>
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[22]:</div>
 <div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
 <pre>(dict_keys(['years_of_insurance_with_us', 'regular_checkup_last_year', 'adventure_sports', 'visited_doctor_last_1_year', 'daily_avg_steps', 'age', 'heart_disease_history', 'other_major_disease_history', 'avg_glucose_level', 'bmi', 'weight', 'weight_change_in_last_one_year', 'fat_percentage', 'Year_last_admitted']),
  54,
@@ -10807,12 +10804,12 @@ Streamlit app artifact: app.py
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=77254b7c">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=734dadb7">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [22]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [23]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">app_schema</span><span class="p">[</span><span class="s2">"numeric_ranges"</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
@@ -10826,7 +10823,7 @@ Streamlit app artifact: app.py
 </div>
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[22]:</div>
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[23]:</div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
 <div>
 <style scoped="">
@@ -10944,7 +10941,7 @@ Streamlit app artifact: app.py
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=82f6bd67">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=39b0c862">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -10964,7 +10961,7 @@ Streamlit app artifact: app.py
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=e65545e7">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=59d8a8d9">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -10974,12 +10971,12 @@ Streamlit app artifact: app.py
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=6b2560a5">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=23e519c9">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [23]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [24]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">deployment_variant</span> <span class="o">=</span> <span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"deployment_variant"</span><span class="p">,</span> <span class="p">{})</span>
@@ -10994,7 +10991,7 @@ Streamlit app artifact: app.py
 </div>
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[23]:</div>
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[24]:</div>
 <div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
 <pre>{'analytics_prediction': 'raw_continuous',
  'quote_band': 'rounded_to_nearest_price_band',
@@ -11006,7 +11003,7 @@ Streamlit app artifact: app.py
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=7ae51a78">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=7ca5032e">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -11026,7 +11023,7 @@ Streamlit app artifact: app.py
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=7aa0a446">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=0c033371">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -11036,12 +11033,12 @@ Streamlit app artifact: app.py
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=2c70597f">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=920b5dfc">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [24]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [25]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">selected_mask</span> <span class="o">=</span> <span class="n">metrics</span><span class="p">[</span><span class="s2">"selected_final_model"</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">isin</span><span class="p">([</span><span class="s2">"true"</span><span class="p">,</span> <span class="s2">"1"</span><span class="p">])</span>
@@ -11063,7 +11060,7 @@ Streamlit app artifact: app.py
 </div>
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[24]:</div>
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[25]:</div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
 <div>
 <style scoped="">
@@ -11115,7 +11112,7 @@ Streamlit app artifact: app.py
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=283e3dc8">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=11da3c6f">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -11135,7 +11132,7 @@ Streamlit app artifact: app.py
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=29b59a82">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=81495809">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -11146,7 +11143,7 @@ Streamlit app artifact: app.py
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=e7e8bd95">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=d978e792">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -11166,7 +11163,7 @@ Streamlit app artifact: app.py
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=aee2b9fb">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=61b8c207">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -11186,7 +11183,7 @@ Streamlit app artifact: app.py
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=71108150">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=d95a9f63">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -11196,12 +11193,12 @@ Streamlit app artifact: app.py
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=7ed921a3">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=a30db6fe">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [25]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [26]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">required</span> <span class="o">=</span> <span class="p">[</span>
@@ -11224,7 +11221,7 @@ Streamlit app artifact: app.py
 </div>
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[25]:</div>
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[26]:</div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
 <div>
 <style scoped="">
@@ -11292,7 +11289,7 @@ Streamlit app artifact: app.py
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c4010b67">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=8424cc62">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -11312,7 +11309,7 @@ Streamlit app artifact: app.py
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=01dd61c6">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b08f2e42">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -11323,7 +11320,7 @@ Streamlit app artifact: app.py
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=8083cb8d">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=cfd1deb6">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>

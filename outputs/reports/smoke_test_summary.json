@@ -9,7 +9,6 @@
     "Milestone_2_Insurance_Price_Prediction.docx": true,
     "Insurance_Price_Prediction_Final_Presentation.pptx": true,
     "app.py": true,
-    "README.md": true,
     "outputs/models/final_model.pkl": true,
     "outputs/models/model_metrics.csv": true,
     "outputs/models/final_model_summary.csv": true,
@@ -31,8 +30,8 @@
     "notebooks/01_milestone1_eda.ipynb": true,
     "notebooks/02_milestone2_modeling.ipynb": true,
     "notebooks/01_milestone1_eda.html": true,
-    "outputs/notebooks/01_milestone1_eda.html": true,
     "notebooks/02_milestone2_modeling.html": true,
+    "outputs/notebooks/01_milestone1_eda.html": true,
     "outputs/notebooks/02_milestone2_modeling.html": true
   },
   "prediction": {
@@ -50,23 +49,73 @@
   "notebook_quality": {
     "01_milestone1_eda.ipynb": {
       "exists": true,
-      "cell_count": 161,
-      "technical_interpretation_count": 68,
-      "business_interpretation_count": 68,
+      "cell_count": 162,
+      "technical_interpretation_count": 74,
+      "business_interpretation_count": 74,
       "passes_threshold": true
     },
     "02_milestone2_modeling.ipynb": {
       "exists": true,
-      "cell_count": 66,
-      "technical_interpretation_count": 21,
-      "business_interpretation_count": 21,
+      "cell_count": 67,
+      "technical_interpretation_count": 27,
+      "business_interpretation_count": 27,
       "passes_threshold": true
+    }
+  },
+  "notebook_self_contained": {
+    "01_milestone1_eda.ipynb": {
+      "exists": true,
+      "self_contained": true,
+      "embedded_helper_cell_count": 1,
+      "visible_external_project_import_counts": {
+        "from run_all import": 0,
+        "import run_all": 0,
+        "from insurance_modeling import": 0,
+        "sys.path.insert": 0
+      },
+      "embedded_helper_input_hidden_in_html": true,
+      "required_input_files": [
+        "Insurance Data.csv"
+      ],
+      "note": "Helper source is embedded in the notebook; visible analysis cells do not import local project scripts."
+    },
+    "02_milestone2_modeling.ipynb": {
+      "exists": true,
+      "self_contained": true,
+      "embedded_helper_cell_count": 1,
+      "visible_external_project_import_counts": {
+        "from run_all import": 0,
+        "import run_all": 0,
+        "from insurance_modeling import": 0,
+        "sys.path.insert": 0
+      },
+      "embedded_helper_input_hidden_in_html": true,
+      "required_input_files": [
+        "Insurance Data.csv"
+      ],
+      "note": "Helper source is embedded in the notebook; visible analysis cells do not import local project scripts."
+    }
+  },
+  "notebook_warning_outputs": {
+    "01_milestone1_eda.ipynb": {
+      "exists": true,
+      "stderr_output_count": 0,
+      "warning_or_traceback_output_count": 0,
+      "error_output_count": 0,
+      "clean": true
+    },
+    "02_milestone2_modeling.ipynb": {
+      "exists": true,
+      "stderr_output_count": 0,
+      "warning_or_traceback_output_count": 0,
+      "error_output_count": 0,
+      "clean": true
     }
   },
   "notebook_html": {
     "notebooks/01_milestone1_eda.html": true,
-    "outputs/notebooks/01_milestone1_eda.html": true,
     "notebooks/02_milestone2_modeling.html": true,
+    "outputs/notebooks/01_milestone1_eda.html": true,
     "outputs/notebooks/02_milestone2_modeling.html": true
   },
   "docx_interpretation_counts": {

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 import importlib.util
 import json
 import math
@@ -40,6 +41,7 @@ from pptx.util import Inches as PptInches
 from pptx.util import Pt as PptPt
 from nbclient import NotebookClient
 from nbconvert import HTMLExporter
+from nbconvert.preprocessors import TagRemovePreprocessor
 from sklearn.base import clone
 from sklearn.compose import TransformedTargetRegressor
 from sklearn.dummy import DummyRegressor
@@ -3529,12 +3531,91 @@ st.warning(
     return path
 
 
+NOTEBOOK_RUN_ALL_EXPORTS = [
+    "ROOT",
+    "OUTPUTS",
+    "FIG_DIR",
+    "TABLE_DIR",
+    "MODEL_DIR",
+    "REPORT_DIR",
+    "TARGET",
+    "RANDOM_STATE",
+    "add_report_features",
+    "build_models",
+    "ensure_dirs",
+    "generate_eda_figures",
+    "make_target_strata",
+    "save_profile_tables",
+    "set_visual_theme",
+    "summarize_eda",
+    "target_grid_metadata",
+    "write_milestone1_rubric_coverage_matrix",
+    "write_streamlit_app",
+]
+
+
+NOTEBOOK_INSURANCE_EXPORTS = [
+    "RAW_MODEL_COLUMNS",
+    "InsuranceFeatureEngineer",
+    "clean_column_names",
+]
+
+
+def embedded_notebook_bootstrap_source() -> str:
+    insurance_source = (ROOT / "insurance_modeling.py").read_text(encoding="utf-8")
+    run_all_source = (ROOT / "run_all.py").read_text(encoding="utf-8")
+    return f"""
+    # Self-contained notebook bootstrap.
+    # The helper modules below are embedded as source strings, so this notebook can
+    # run from the supplied Insurance Data.csv without reading local project .py files.
+    import sys
+    import types
+    from pathlib import Path
+
+    ROOT = Path.cwd()
+    if not (ROOT / "Insurance Data.csv").exists():
+        ROOT = ROOT.parent
+
+    _INSURANCE_MODELING_SOURCE = {insurance_source!r}
+    _RUN_ALL_SOURCE = {run_all_source!r}
+
+    _insurance_module = types.ModuleType("insurance_modeling")
+    _insurance_module.__file__ = str(ROOT / "embedded_insurance_modeling.py")
+    sys.modules["insurance_modeling"] = _insurance_module
+    exec(
+        compile(_INSURANCE_MODELING_SOURCE, _insurance_module.__file__, "exec"),
+        _insurance_module.__dict__,
+    )
+
+    _run_all_module = types.ModuleType("run_all")
+    _run_all_module.__file__ = str(ROOT / "embedded_run_all.py")
+    sys.modules["run_all"] = _run_all_module
+    exec(
+        compile(_RUN_ALL_SOURCE, _run_all_module.__file__, "exec"),
+        _run_all_module.__dict__,
+    )
+
+    for _name in {NOTEBOOK_RUN_ALL_EXPORTS!r}:
+        globals()[_name] = getattr(_run_all_module, _name)
+    for _name in {NOTEBOOK_INSURANCE_EXPORTS!r}:
+        globals()[_name] = getattr(_insurance_module, _name)
+
+    del _INSURANCE_MODELING_SOURCE, _RUN_ALL_SOURCE
+    print("Embedded helper code loaded from notebook; no external .py helper scripts required.")
+    """
+
+
 def create_notebooks() -> list[Path]:
     def md(text: str):
         return nbf.v4.new_markdown_cell(textwrap.dedent(text).strip())
 
-    def code(source: str):
-        return nbf.v4.new_code_cell(textwrap.dedent(source).strip())
+    def code(source: str, tags: list[str] | None = None):
+        cell = nbf.v4.new_code_cell(textwrap.dedent(source).strip())
+        if tags:
+            cell.metadata["tags"] = tags
+        if tags and "embedded-helper-code" in tags:
+            cell.metadata.setdefault("jupyter", {})["source_hidden"] = True
+        return cell
 
     notebook_css = f"""
     <style>
@@ -3707,10 +3788,10 @@ def create_notebooks() -> list[Path]:
             "A pricing model is only useful if reviewers can see why the data is usable, what the target means, and which applicant characteristics drive the estimate.",
         ),
         md("## 2. Import Libraries and Set Paths"),
+        code(embedded_notebook_bootstrap_source(), tags=["embedded-helper-code", "remove-input"]),
         code(
             """
             import json
-            import sys
             from pathlib import Path
 
             import numpy as np
@@ -3722,18 +3803,6 @@ def create_notebooks() -> list[Path]:
             ROOT = Path.cwd()
             if not (ROOT / "Insurance Data.csv").exists():
                 ROOT = ROOT.parent
-            sys.path.insert(0, str(ROOT))
-
-            from insurance_modeling import RAW_MODEL_COLUMNS, clean_column_names
-            from run_all import (
-                add_report_features,
-                ensure_dirs,
-                generate_eda_figures,
-                save_profile_tables,
-                set_visual_theme,
-                summarize_eda,
-                write_milestone1_rubric_coverage_matrix,
-            )
 
             TABLE_DIR = ROOT / "outputs" / "tables"
             FIG_DIR = ROOT / "outputs" / "figures"
@@ -3748,8 +3817,8 @@ def create_notebooks() -> list[Path]:
             """
         ),
         interp(
-            "The notebook resolves the project root, creates output folders, and imports the same helper functions used by the automated pipeline.",
-            "A reviewer can execute the notebook from the supplied dataset without needing pre-generated EDA tables or figures.",
+            "The notebook resolves the project root, creates output folders, and loads embedded helper functions directly from notebook cells.",
+            "A reviewer can execute the notebook from the supplied dataset without needing pre-generated EDA tables, figures, or external helper scripts.",
         ),
         md("## 3. End-to-End EDA Artifact Generation"),
         code(
@@ -4171,10 +4240,10 @@ def create_notebooks() -> list[Path]:
             calibration behavior, explainability outputs, and Streamlit deployment artifacts.
             """
         ),
+        code(embedded_notebook_bootstrap_source(), tags=["embedded-helper-code", "remove-input"]),
         code(
             """
             import json
-            import sys
             from pathlib import Path
 
             import joblib
@@ -4185,17 +4254,6 @@ def create_notebooks() -> list[Path]:
             ROOT = Path.cwd()
             if not (ROOT / "Insurance Data.csv").exists():
                 ROOT = ROOT.parent
-            sys.path.insert(0, str(ROOT))
-
-            from run_all import (
-                add_report_features,
-                build_models,
-                ensure_dirs,
-                generate_eda_figures,
-                save_profile_tables,
-                set_visual_theme,
-                write_streamlit_app,
-            )
 
             TABLE_DIR = ROOT / "outputs" / "tables"
             FIG_DIR = ROOT / "outputs" / "figures"
@@ -4207,8 +4265,8 @@ def create_notebooks() -> list[Path]:
             """
         ),
         interp(
-            "The modeling notebook resolves the project root, creates output folders, and imports the training/deployment helpers.",
-            "A reviewer can execute the notebook from `Insurance Data.csv` without relying on pre-generated model outputs.",
+            "The modeling notebook resolves the project root, creates output folders, and uses training/deployment helpers embedded in the notebook.",
+            "A reviewer can execute the notebook from `Insurance Data.csv` without relying on external helper scripts or pre-generated model outputs.",
         ),
         md("## 2. End-to-End Modeling Artifact Generation"),
         code(
@@ -4237,9 +4295,6 @@ def create_notebooks() -> list[Path]:
         code(
             """
             from sklearn.model_selection import train_test_split
-
-            from insurance_modeling import clean_column_names
-            from run_all import RANDOM_STATE, TARGET, make_target_strata, target_grid_metadata
 
             raw_model_df = clean_column_names(pd.read_csv(ROOT / "Insurance Data.csv"))
             X = raw_model_df.drop(columns=[TARGET, "applicant_id"], errors="ignore")
@@ -4372,8 +4427,6 @@ def create_notebooks() -> list[Path]:
         md("## 11. Saved Model Load and Prediction Smoke Test"),
         code(
             """
-            from insurance_modeling import clean_column_names
-
             model = joblib.load(MODEL_DIR / "final_model.pkl")
             raw_df = pd.read_csv(ROOT / "Insurance Data.csv")
             sample = clean_column_names(raw_df).drop(columns=["insurance_cost", "applicant_id"], errors="ignore").head(5)
@@ -4501,8 +4554,13 @@ def create_notebooks() -> list[Path]:
 
 def execute_and_export_notebooks(notebook_paths: list[Path]) -> list[Path]:
     exported: list[Path] = []
+    if os.name == "nt":
+        asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
     exporter = HTMLExporter()
     exporter.template_name = "lab"
+    tag_preprocessor = TagRemovePreprocessor(remove_input_tags={"remove-input"})
+    tag_preprocessor.enabled = True
+    exporter.register_preprocessor(tag_preprocessor, enabled=True)
     if hasattr(exporter, "embed_images"):
         exporter.embed_images = True
     for nb_path in notebook_paths:
@@ -5129,6 +5187,69 @@ def notebook_quality_summary(notebook_paths: list[Path]) -> dict[str, object]:
     return summary
 
 
+def notebook_self_contained_summary(notebook_paths: list[Path]) -> dict[str, object]:
+    patterns = ["from run_all import", "import run_all", "from insurance_modeling import", "sys.path.insert"]
+    summary: dict[str, object] = {}
+    for path in notebook_paths:
+        if not path.exists():
+            summary[path.name] = {"exists": False, "self_contained": False}
+            continue
+        notebook = nbf.read(path, as_version=4)
+        embedded_cells = [cell for cell in notebook.cells if "embedded-helper-code" in cell.metadata.get("tags", [])]
+        visible_cells = [cell for cell in notebook.cells if "embedded-helper-code" not in cell.metadata.get("tags", [])]
+        visible_source = "\n".join(str(cell.get("source", "")) for cell in visible_cells)
+        pattern_counts = {pattern: visible_source.count(pattern) for pattern in patterns}
+        helper_cells_hidden = bool(
+            embedded_cells
+            and all(
+                "remove-input" in cell.metadata.get("tags", [])
+                and bool(cell.metadata.get("jupyter", {}).get("source_hidden"))
+                for cell in embedded_cells
+            )
+        )
+        self_contained = bool(embedded_cells and sum(pattern_counts.values()) == 0)
+        summary[path.name] = {
+            "exists": True,
+            "self_contained": self_contained,
+            "embedded_helper_cell_count": len(embedded_cells),
+            "visible_external_project_import_counts": pattern_counts,
+            "embedded_helper_input_hidden_in_html": helper_cells_hidden,
+            "required_input_files": ["Insurance Data.csv"],
+            "note": "Helper source is embedded in the notebook; visible analysis cells do not import local project scripts.",
+        }
+    return summary
+
+
+def notebook_warning_output_summary(notebook_paths: list[Path]) -> dict[str, object]:
+    summary: dict[str, object] = {}
+    for path in notebook_paths:
+        if not path.exists():
+            summary[path.name] = {"exists": False}
+            continue
+        notebook = nbf.read(path, as_version=4)
+        stderr_count = 0
+        warning_or_traceback_count = 0
+        error_count = 0
+        for cell in notebook.cells:
+            for output in cell.get("outputs", []):
+                text_value = output.get("text", "")
+                text = "".join(text_value) if isinstance(text_value, list) else str(text_value)
+                if output.get("name") == "stderr":
+                    stderr_count += 1
+                if "warning" in text.lower() or "traceback" in text.lower():
+                    warning_or_traceback_count += 1
+                if output.get("output_type") == "error":
+                    error_count += 1
+        summary[path.name] = {
+            "exists": True,
+            "stderr_output_count": stderr_count,
+            "warning_or_traceback_output_count": warning_or_traceback_count,
+            "error_output_count": error_count,
+            "clean": stderr_count == 0 and warning_or_traceback_count == 0 and error_count == 0,
+        }
+    return summary
+
+
 def rubric_matrix_quality() -> dict[str, object]:
     path = REPORT_DIR / "milestone1_rubric_coverage_matrix.csv"
     if not path.exists():
@@ -5215,6 +5336,8 @@ def run_smoke_checks(
         "required_artifacts": {},
         "prediction": {},
         "notebook_quality": {},
+        "notebook_self_contained": {},
+        "notebook_warning_outputs": {},
         "notebook_html": {},
         "docx_interpretation_counts": {},
         "rubric_matrix": {},
@@ -5232,6 +5355,8 @@ def run_smoke_checks(
 
     if notebook_paths:
         summary["notebook_quality"] = notebook_quality_summary(notebook_paths)
+        summary["notebook_self_contained"] = notebook_self_contained_summary(notebook_paths)
+        summary["notebook_warning_outputs"] = notebook_warning_output_summary(notebook_paths)
     if notebook_html_paths:
         summary["notebook_html"] = {rel_path(path): path.exists() for path in notebook_html_paths}
     if m1_docx_path is not None and m1_docx_path.exists():
@@ -5334,6 +5459,8 @@ def main() -> None:
         },
         "pptx": inspect_pptx(ppt_path),
         "smoke_tests": smoke_summary,
+        "notebook_self_contained": notebook_self_contained_summary(notebooks),
+        "notebook_warning_outputs": notebook_warning_output_summary(notebooks),
         "artifacts": {
             "app": rel_path(app_path),
             "notebooks": [rel_path(p) for p in notebooks],
