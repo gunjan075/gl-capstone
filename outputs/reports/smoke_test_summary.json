@@ -13,20 +13,10 @@
     "outputs/models/model_metrics.csv": true,
     "outputs/models/final_model_summary.csv": true,
     "outputs/models/model_metadata.json": true,
-    "outputs/models/feature_importance.csv": true,
-    "outputs/models/repeated_cv_metrics.csv": true,
-    "outputs/models/price_grid_evaluation.csv": true,
-    "outputs/models/calibration_comparison.csv": true,
-    "outputs/models/ordinal_challenger_metrics.csv": true,
-    "outputs/models/app_schema.json": true,
-    "outputs/models/shap_status.json": true,
-    "outputs/figures/target_price_grid_frequency.png": true,
-    "outputs/figures/calibration_curve.png": true,
     "outputs/tables/target_grid_summary.csv": true,
     "outputs/tables/feature_signal_strength.csv": true,
     "outputs/tables/variable_type_classification.csv": true,
     "outputs/tables/univariate_plot_interpretations.csv": true,
-    "outputs/reports/milestone1_rubric_coverage_matrix.csv": true,
     "notebooks/01_milestone1_eda.ipynb": true,
     "notebooks/02_milestone2_modeling.ipynb": true,
     "notebooks/01_milestone1_eda.html": true,
@@ -49,7 +39,7 @@
   "notebook_quality": {
     "01_milestone1_eda.ipynb": {
       "exists": true,
-      "cell_count": 171,
+      "cell_count": 162,
       "technical_interpretation_count": 68,
       "business_interpretation_count": 68,
       "passes_threshold": true
@@ -66,7 +56,8 @@
     "01_milestone1_eda.ipynb": {
       "exists": true,
       "self_contained": true,
-      "visible_helper_source_cell_count": 4,
+      "visible_helper_source_cell_count": 0,
+      "inline_helper_workflow_cell_count": 1,
       "analysis_external_project_import_counts": {
         "from run_all import": 0,
         "import run_all": 0,
@@ -84,6 +75,7 @@
       "exists": true,
       "self_contained": true,
       "visible_helper_source_cell_count": 6,
+      "inline_helper_workflow_cell_count": 0,
       "analysis_external_project_import_counts": {
         "from run_all import": 0,
         "import run_all": 0,
