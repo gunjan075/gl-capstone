@@ -3635,6 +3635,155 @@ def notebook_insurance_modeling_source() -> str:
     return source.rstrip() + "\n" + textwrap.dedent(module_registration).strip()
 
 
+def extract_insurance_modeling_source(
+    assignments: list[str],
+    definitions: list[str],
+    register_module: bool = False,
+    import_header: str | None = None,
+) -> str:
+    source = (ROOT / "insurance_modeling.py").read_text(encoding="utf-8")
+    lines = source.splitlines()
+    module = ast.parse(source)
+    wanted_assignments = set(assignments)
+    wanted_definitions = set(definitions)
+    found_assignments: set[str] = set()
+    found_definitions: set[str] = set()
+    chunks: list[str] = []
+    if import_header:
+        chunks.append(textwrap.dedent(import_header).strip())
+    for node in module.body:
+        if isinstance(node, (ast.Import, ast.ImportFrom)) and not import_header:
+            chunks.append("\n".join(lines[node.lineno - 1 : node.end_lineno]))
+        elif isinstance(node, ast.Assign):
+            names = {target.id for target in node.targets if isinstance(target, ast.Name)}
+            if names & wanted_assignments:
+                found_assignments.update(names & wanted_assignments)
+                chunks.append("\n".join(lines[node.lineno - 1 : node.end_lineno]))
+        elif isinstance(node, (ast.FunctionDef, ast.ClassDef)) and node.name in wanted_definitions:
+            found_definitions.add(node.name)
+            chunks.append("\n".join(lines[node.lineno - 1 : node.end_lineno]))
+    missing_assignments = wanted_assignments - found_assignments
+    missing_definitions = wanted_definitions - found_definitions
+    if missing_assignments or missing_definitions:
+        raise ValueError(
+            "Missing insurance_modeling notebook extraction entries: "
+            f"assignments={sorted(missing_assignments)}, definitions={sorted(missing_definitions)}"
+        )
+    if register_module:
+        export_names = assignments + definitions
+        registration = f"""
+
+        # Register visible notebook definitions under the original module name so
+        # saved sklearn/joblib artifacts can load without an external .py file.
+        import sys
+        import types
+
+        _insurance_module = types.ModuleType("insurance_modeling")
+        InsuranceFeatureEngineer.__module__ = "insurance_modeling"
+        for _name in {export_names!r}:
+            setattr(_insurance_module, _name, globals()[_name])
+        sys.modules["insurance_modeling"] = _insurance_module
+        """
+        chunks.append(textwrap.dedent(registration).strip())
+    return "\n\n".join(chunks)
+
+
+INSURANCE_ASSIGNMENTS = [
+    "COLUMN_RENAMES",
+    "BASE_NUMERIC_FEATURES",
+    "NUMERIC_FEATURES",
+    "BASE_CATEGORICAL_FEATURES",
+    "CATEGORICAL_FEATURES",
+    "RAW_MODEL_COLUMNS",
+]
+
+
+def notebook_m1_preprocessing_source() -> str:
+    return extract_insurance_modeling_source(
+        assignments=INSURANCE_ASSIGNMENTS,
+        definitions=[
+            "clean_column_names",
+            "make_age_band",
+            "make_bmi_category",
+            "cholesterol_to_midpoint",
+            "_category_score",
+            "InsuranceFeatureEngineer",
+        ],
+        import_header="""
+        import re
+
+        import numpy as np
+        import pandas as pd
+        from sklearn.base import BaseEstimator, TransformerMixin
+        """,
+    )
+
+
+def notebook_m2_preprocessing_source() -> str:
+    return extract_insurance_modeling_source(
+        assignments=INSURANCE_ASSIGNMENTS,
+        definitions=[
+            "clean_column_names",
+            "make_age_band",
+            "make_bmi_category",
+            "cholesterol_to_midpoint",
+            "_category_score",
+            "InsuranceFeatureEngineer",
+            "make_preprocessor",
+            "make_model_pipeline",
+            "smape",
+            "evaluate_regression",
+        ],
+        register_module=True,
+    )
+
+
+def notebook_modeling_imports_source() -> str:
+    return """
+    import importlib.util
+    import math
+    import os
+    import pickle
+    import shutil
+    import subprocess
+    import warnings
+
+    from sklearn.base import clone
+    from sklearn.compose import TransformedTargetRegressor
+    from sklearn.dummy import DummyRegressor
+    from sklearn.ensemble import (
+        ExtraTreesRegressor,
+        GradientBoostingRegressor,
+        HistGradientBoostingClassifier,
+        HistGradientBoostingRegressor,
+        RandomForestRegressor,
+        VotingRegressor,
+    )
+    from sklearn.inspection import PartialDependenceDisplay, permutation_importance
+    from sklearn.isotonic import IsotonicRegression
+    from sklearn.linear_model import LinearRegression, Ridge
+    from sklearn.model_selection import KFold, RandomizedSearchCV, RepeatedKFold, cross_val_score, train_test_split
+    from sklearn.tree import DecisionTreeRegressor
+
+    warnings.filterwarnings("ignore", message="X does not have valid feature names.*")
+
+    try:
+        from catboost import CatBoostRegressor
+    except ImportError:
+        CatBoostRegressor = None
+
+    try:
+        from lightgbm import LGBMRegressor
+    except ImportError:
+        LGBMRegressor = None
+
+    try:
+        from xgboost import XGBRegressor
+    except ImportError:
+        XGBRegressor = None
+    """
+
+
 def notebook_run_all_source() -> str:
     source = (ROOT / "run_all.py").read_text(encoding="utf-8")
     source = source.replace(
@@ -3694,12 +3843,27 @@ def notebook_runtime_helper_source() -> str:
     return extract_run_all_definitions(
         [
             "ensure_dirs",
-            "load_raw_data",
             "write_csv",
             "set_visual_theme",
             "bar_palette",
             "style_current_figure",
             "rel_path",
+        ]
+    )
+
+
+def notebook_m1_eda_helper_source() -> str:
+    return extract_run_all_definitions(
+        [
+            "add_report_features",
+            "target_grid_metadata",
+            "save_profile_tables",
+            "savefig",
+            "safe_slug",
+            "create_univariate_plot_set",
+            "generate_eda_figures",
+            "summarize_eda",
+            "write_milestone1_rubric_coverage_matrix",
         ]
     )
 
@@ -3934,21 +4098,14 @@ def create_notebooks() -> list[Path]:
             "Milestone 1 is treated as the analytical foundation: data quality, target behavior, missingness, and important relationships are documented before model fitting.",
             "A pricing model is only useful if reviewers can see why the data is usable, what the target means, and which applicant characteristics drive the estimate.",
         ),
-        md("## 2. Runtime Setup Helpers"),
+        md("## 2. Import Libraries and Set Paths"),
         md(
             """
-            Definitions are introduced close to where they are first used. This setup section
-            defines preprocessing classes, shared imports, constants, output paths, and theme
-            helpers required before the first runtime setup call.
+            This setup cell only imports packages, resolves the project path, defines shared
+            constants, and creates output folders. Workflow-specific helper functions are kept
+            inside the cells where they are first used.
             """
         ),
-        md("### 2.1 Model and preprocessing definitions"),
-        code(notebook_insurance_modeling_source(), tags=["notebook-helper-source"]),
-        md("### 2.2 Shared imports, constants, and output-path definitions"),
-        code(notebook_run_all_imports_and_constants_source(), tags=["notebook-helper-source"]),
-        md("### 2.3 Setup helper definitions first used below"),
-        code(notebook_runtime_helper_source(), tags=["notebook-helper-source"]),
-        md("### 2.4 Import Libraries and Set Paths"),
         code(
             """
             import json
@@ -3964,39 +4121,68 @@ def create_notebooks() -> list[Path]:
             if not (ROOT / "Insurance Data.csv").exists():
                 ROOT = ROOT.parent
 
+            OUTPUTS = ROOT / "outputs"
             TABLE_DIR = ROOT / "outputs" / "tables"
             FIG_DIR = ROOT / "outputs" / "figures"
             MODEL_DIR = ROOT / "outputs" / "models"
             REPORT_DIR = ROOT / "outputs" / "reports"
+            NOTEBOOK_DIR = ROOT / "notebooks"
+            OUTPUT_NOTEBOOK_DIR = ROOT / "outputs" / "notebooks"
 
-            ensure_dirs()
-            set_visual_theme()
+            TARGET = "insurance_cost"
+            RANDOM_STATE = 42
+            PRIMARY = "#12355B"
+            ACCENT = "#2A9D8F"
+            WARN = "#E76F51"
+            MUTED = "#6B7280"
+            SECONDARY = "#457B9D"
+            GOLD = "#E9C46A"
+            GREEN = "#8AB17D"
+            PLUM = "#6D597A"
+            SKY = "#5DADE2"
+            PLOT_BG = "#FBFCFE"
+            GRID = "#E5E7EB"
+            TEXT = "#1F2937"
+            CHART_PALETTE = [ACCENT, SECONDARY, WARN, GOLD, GREEN, PLUM, SKY, "#F4A261"]
+
+            for directory in [OUTPUTS, FIG_DIR, TABLE_DIR, MODEL_DIR, REPORT_DIR, NOTEBOOK_DIR, OUTPUT_NOTEBOOK_DIR]:
+                directory.mkdir(parents=True, exist_ok=True)
             pd.set_option("display.max_columns", 80)
             pd.set_option("display.width", 140)
             print(ROOT)
             """
         ),
         interp(
-            "The notebook resolves the project root, creates output folders, and uses setup helper functions defined immediately above.",
+            "The notebook resolves the project root and creates output folders without loading a large helper block at the top.",
             "A reviewer can execute the notebook from the supplied dataset without needing pre-generated EDA tables, figures, or external helper scripts.",
         ),
         md("## 3. End-to-End EDA Artifact Generation"),
-        md("### 3.1 EDA helper definitions first used in the next cell"),
-        code(notebook_target_and_eda_helper_source(), tags=["notebook-helper-source"]),
         code(
-            """
-            DATA_PATH = ROOT / "Insurance Data.csv"
-            raw_df = pd.read_csv(DATA_PATH)
-            report_df = add_report_features(raw_df)
-            tables = save_profile_tables(raw_df, report_df)
-            figures = generate_eda_figures(raw_df, report_df)
-            eda_summary = summarize_eda(report_df)
-            rubric_path = write_milestone1_rubric_coverage_matrix()
+            "\n\n".join(
+                [
+                    notebook_m1_preprocessing_source(),
+                    notebook_runtime_helper_source(),
+                    notebook_m1_eda_helper_source(),
+                    textwrap.dedent(
+                        """
+                        ensure_dirs()
+                        set_visual_theme()
 
-            print(f"Loaded dataset: {DATA_PATH.name} -> {raw_df.shape[0]:,} rows, {raw_df.shape[1]:,} columns")
-            print(f"Generated {len(tables)} named profile tables and {len(figures)} EDA figures.")
-            print(f"Rubric coverage matrix: {rubric_path.relative_to(ROOT)}")
-            """
+                        DATA_PATH = ROOT / "Insurance Data.csv"
+                        raw_df = pd.read_csv(DATA_PATH)
+                        report_df = add_report_features(raw_df)
+                        tables = save_profile_tables(raw_df, report_df)
+                        figures = generate_eda_figures(raw_df, report_df)
+                        eda_summary = summarize_eda(report_df)
+                        rubric_path = write_milestone1_rubric_coverage_matrix()
+
+                        print(f"Loaded dataset: {DATA_PATH.name} -> {raw_df.shape[0]:,} rows, {raw_df.shape[1]:,} columns")
+                        print(f"Generated {len(tables)} named profile tables and {len(figures)} EDA figures.")
+                        print(f"Rubric coverage matrix: {rubric_path.relative_to(ROOT)}")
+                        """
+                    ).strip(),
+                ]
+            )
         ),
         interp(
             "This cell regenerates the Milestone 1 tables, cleaned analysis dataset, univariate plot index, and EDA figures directly from `Insurance Data.csv`.",
