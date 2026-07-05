@@ -2610,7 +2610,7 @@ def add_numbered(doc: Document, items: list[str]) -> None:
             p.add_run(f"{i}. {item}")
 
 
-def add_picture(doc: Document, path: Path, caption: str, width: float = 6.2) -> None:
+def add_picture(doc: Document, path: Path, caption: str, width: float = 5.25) -> None:
     if not path.exists():
         return
     doc.add_picture(str(path), width=Inches(width))
@@ -2649,7 +2649,7 @@ def add_picture_with_interpretations(
     technical: str,
     business: str,
     caution: str | None = None,
-    width: float = 6.2,
+    width: float = 5.25,
 ) -> None:
     add_picture(doc, path, caption, width=width)
     if path.exists():
@@ -3031,7 +3031,7 @@ def generate_milestone1_report(
             f"Univariate distribution or frequency for {clean_col}.",
             str(row["technical_interpretation"]),
             str(row["business_interpretation"]),
-            width=5.8,
+            width=4.75,
         )
 
     doc.add_heading("Selected Group Summaries", level=2)
@@ -3486,7 +3486,7 @@ def create_notebooks() -> list[Path]:
             image_path = ROOT / {relative_path!r}
             display(Markdown("**{title}**"))
             if image_path.exists():
-                display(Image(filename=str(image_path)))
+                display(Image(filename=str(image_path), width=700))
             else:
                 print(f"Missing image: {{image_path}}")
             """
