@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+import ast
 import importlib.util
 import json
 import math
@@ -3649,6 +3650,108 @@ def notebook_run_all_source() -> str:
     return source.rstrip()
 
 
+def extract_run_all_definitions(names: list[str]) -> str:
+    source = (ROOT / "run_all.py").read_text(encoding="utf-8")
+    lines = source.splitlines()
+    module = ast.parse(source)
+    wanted = set(names)
+    chunks: list[str] = []
+    for node in module.body:
+        if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)) and node.name in wanted:
+            chunks.append("\n".join(lines[node.lineno - 1 : node.end_lineno]))
+    missing = wanted - {
+        node.name
+        for node in module.body
+        if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)) and node.name in wanted
+    }
+    if missing:
+        raise ValueError(f"Missing run_all definitions for notebook extraction: {sorted(missing)}")
+    return "\n\n".join(chunks)
+
+
+def notebook_run_all_imports_and_constants_source() -> str:
+    source = (ROOT / "run_all.py").read_text(encoding="utf-8")
+    lines = source.splitlines()
+    module = ast.parse(source)
+    end_line = 0
+    for node in module.body:
+        if isinstance(node, ast.Assign) and any(
+            isinstance(target, ast.Name) and target.id == "CHART_PALETTE" for target in node.targets
+        ):
+            end_line = node.end_lineno
+            break
+    if not end_line:
+        raise ValueError("Could not find CHART_PALETTE assignment while extracting notebook constants.")
+    preamble = "\n".join(lines[:end_line])
+    return preamble.replace(
+        'ROOT = Path(__file__).resolve().parent',
+        'ROOT = Path.cwd()\nif not (ROOT / "Insurance Data.csv").exists():\n    ROOT = ROOT.parent',
+        1,
+    )
+
+
+def notebook_runtime_helper_source() -> str:
+    return extract_run_all_definitions(
+        [
+            "ensure_dirs",
+            "load_raw_data",
+            "write_csv",
+            "set_visual_theme",
+            "bar_palette",
+            "style_current_figure",
+            "rel_path",
+        ]
+    )
+
+
+def notebook_target_and_eda_helper_source() -> str:
+    return extract_run_all_definitions(
+        [
+            "add_report_features",
+            "target_grid_metadata",
+            "make_target_strata",
+            "save_profile_tables",
+            "savefig",
+            "safe_slug",
+            "create_univariate_plot_set",
+            "generate_eda_figures",
+            "summarize_eda",
+            "write_milestone1_rubric_coverage_matrix",
+        ]
+    )
+
+
+def notebook_modeling_helper_source() -> str:
+    return extract_run_all_definitions(
+        [
+            "gpu_available",
+            "use_gpu_acceleration",
+            "optional_package_available",
+            "optional_model_status_sentence",
+            "explainability_status_sentence",
+            "make_xgboost_cpu_portable",
+            "target_band_indices",
+            "round_to_valid_price_grid",
+            "evaluate_with_price_grid",
+            "prediction_variant_row",
+            "model_complexity_score",
+            "save_split_distribution",
+            "compute_repeated_cv_metrics",
+            "save_calibration_artifacts",
+            "run_ordinal_challenger",
+            "write_app_schema",
+            "build_models",
+            "generate_model_figures",
+            "generate_importance",
+            "generate_shap_explainability",
+        ]
+    )
+
+
+def notebook_deployment_helper_source() -> str:
+    return extract_run_all_definitions(["write_streamlit_app"])
+
+
 def create_notebooks() -> list[Path]:
     def md(text: str):
         return nbf.v4.new_markdown_cell(textwrap.dedent(text).strip())
@@ -3831,20 +3934,21 @@ def create_notebooks() -> list[Path]:
             "Milestone 1 is treated as the analytical foundation: data quality, target behavior, missingness, and important relationships are documented before model fitting.",
             "A pricing model is only useful if reviewers can see why the data is usable, what the target means, and which applicant characteristics drive the estimate.",
         ),
-        md("## 2. Embedded Helper Definitions and Runtime Setup"),
+        md("## 2. Runtime Setup Helpers"),
         md(
             """
-            The next two code cells contain the full helper definitions used by this notebook.
-            They replace external dependencies on `insurance_modeling.py` and `run_all.py`,
-            so functions such as `save_profile_tables()` and `generate_eda_figures()` are
-            visible and executable directly in the notebook.
+            Definitions are introduced close to where they are first used. This setup section
+            defines preprocessing classes, shared imports, constants, output paths, and theme
+            helpers required before the first runtime setup call.
             """
         ),
         md("### 2.1 Model and preprocessing definitions"),
         code(notebook_insurance_modeling_source(), tags=["notebook-helper-source"]),
-        md("### 2.2 EDA/report helper definitions"),
-        code(notebook_run_all_source(), tags=["notebook-helper-source"]),
-        md("### 2.3 Import Libraries and Set Paths"),
+        md("### 2.2 Shared imports, constants, and output-path definitions"),
+        code(notebook_run_all_imports_and_constants_source(), tags=["notebook-helper-source"]),
+        md("### 2.3 Setup helper definitions first used below"),
+        code(notebook_runtime_helper_source(), tags=["notebook-helper-source"]),
+        md("### 2.4 Import Libraries and Set Paths"),
         code(
             """
             import json
@@ -3873,10 +3977,12 @@ def create_notebooks() -> list[Path]:
             """
         ),
         interp(
-            "The notebook resolves the project root, creates output folders, and uses helper functions defined in visible notebook code cells.",
+            "The notebook resolves the project root, creates output folders, and uses setup helper functions defined immediately above.",
             "A reviewer can execute the notebook from the supplied dataset without needing pre-generated EDA tables, figures, or external helper scripts.",
         ),
         md("## 3. End-to-End EDA Artifact Generation"),
+        md("### 3.1 EDA helper definitions first used in the next cell"),
+        code(notebook_target_and_eda_helper_source(), tags=["notebook-helper-source"]),
         code(
             """
             DATA_PATH = ROOT / "Insurance Data.csv"
@@ -4296,19 +4402,20 @@ def create_notebooks() -> list[Path]:
             calibration behavior, explainability outputs, and Streamlit deployment artifacts.
             """
         ),
-        md("## Embedded Helper Definitions and Runtime Setup"),
+        md("## Runtime Setup Helpers"),
         md(
             """
-            The next two code cells contain the full helper definitions used by this notebook.
-            They replace external dependencies on `insurance_modeling.py` and `run_all.py`,
-            so functions such as `build_models()`, `save_profile_tables()`, and
-            `write_streamlit_app()` are visible and executable directly in the notebook.
+            Definitions are introduced close to where they are first used. This setup section
+            defines preprocessing classes, shared imports, constants, output paths, and theme
+            helpers required before the first runtime setup call.
             """
         ),
         md("### Model and preprocessing definitions"),
         code(notebook_insurance_modeling_source(), tags=["notebook-helper-source"]),
-        md("### Modeling, EDA, and deployment helper definitions"),
-        code(notebook_run_all_source(), tags=["notebook-helper-source"]),
+        md("### Shared imports, constants, and output-path definitions"),
+        code(notebook_run_all_imports_and_constants_source(), tags=["notebook-helper-source"]),
+        md("### Setup helper definitions first used below"),
+        code(notebook_runtime_helper_source(), tags=["notebook-helper-source"]),
         code(
             """
             import json
@@ -4333,10 +4440,16 @@ def create_notebooks() -> list[Path]:
             """
         ),
         interp(
-            "The modeling notebook resolves the project root, creates output folders, and uses training/deployment helpers defined in visible notebook code cells.",
+            "The modeling notebook resolves the project root, creates output folders, and uses setup helper functions defined immediately above.",
             "A reviewer can execute the notebook from `Insurance Data.csv` without relying on external helper scripts or pre-generated model outputs.",
         ),
         md("## 2. End-to-End Modeling Artifact Generation"),
+        md("### EDA helper definitions first used in the next cell"),
+        code(notebook_target_and_eda_helper_source(), tags=["notebook-helper-source"]),
+        md("### Modeling helper definitions first used in the next cell"),
+        code(notebook_modeling_helper_source(), tags=["notebook-helper-source"]),
+        md("### Deployment helper definitions first used in the next cell"),
+        code(notebook_deployment_helper_source(), tags=["notebook-helper-source"]),
         code(
             """
             DATA_PATH = ROOT / "Insurance Data.csv"
@@ -5268,10 +5381,10 @@ def notebook_self_contained_summary(notebook_paths: list[Path]) -> dict[str, obj
         analysis_source = "\n".join(str(cell.get("source", "")) for cell in analysis_cells)
         helper_source = "\n".join(str(cell.get("source", "")) for cell in helper_cells)
         analysis_pattern_counts = {pattern: analysis_source.count(pattern) for pattern in patterns}
-        helper_definitions_present = all(
-            required in helper_source
-            for required in ["def save_profile_tables", "def generate_eda_figures", "def build_models", "class InsuranceFeatureEngineer"]
-        )
+        required_helper_defs = ["def save_profile_tables", "def generate_eda_figures", "class InsuranceFeatureEngineer"]
+        if path.name.startswith("02_"):
+            required_helper_defs.extend(["def build_models", "def write_streamlit_app"])
+        helper_definitions_present = all(required in helper_source for required in required_helper_defs)
         self_contained = bool(helper_cells and helper_definitions_present and sum(analysis_pattern_counts.values()) == 0)
         summary[path.name] = {
             "exists": True,
