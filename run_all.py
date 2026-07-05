@@ -3980,9 +3980,44 @@ def create_notebooks() -> list[Path]:
         md("## 2. Train/Test Strategy and Target Stratification"),
         code(
             """
-            split_check = pd.read_csv(TABLE_DIR / "target_band_split_check.csv")
-            display(split_check.head())
-            display(split_check.tail())
+            from sklearn.model_selection import train_test_split
+
+            from insurance_modeling import clean_column_names
+            from run_all import RANDOM_STATE, TARGET, make_target_strata, target_grid_metadata
+
+            raw_model_df = clean_column_names(pd.read_csv(ROOT / "Insurance Data.csv"))
+            X = raw_model_df.drop(columns=[TARGET, "applicant_id"], errors="ignore")
+            y = raw_model_df[TARGET]
+
+            split_strata = make_target_strata(y)
+            X_train, X_test, y_train, y_test = train_test_split(
+                X,
+                y,
+                test_size=0.2,
+                random_state=RANDOM_STATE,
+                stratify=split_strata,
+            )
+
+            valid_levels = target_grid_metadata(y_train)["valid_target_levels"]
+            train_counts = y_train.value_counts().sort_index()
+            test_counts = y_test.value_counts().sort_index()
+            generated_split_check = pd.DataFrame(
+                [
+                    {
+                        "insurance_cost": int(level),
+                        "train_count": int(train_counts.get(level, 0)),
+                        "test_count": int(test_counts.get(level, 0)),
+                        "train_pct": round(int(train_counts.get(level, 0)) / len(y_train) * 100, 3),
+                        "test_pct": round(int(test_counts.get(level, 0)) / len(y_test) * 100, 3),
+                    }
+                    for level in valid_levels
+                ]
+            )
+
+            saved_split_check = pd.read_csv(TABLE_DIR / "target_band_split_check.csv")
+            print("Matches saved target_band_split_check.csv:", generated_split_check.equals(saved_split_check))
+            display(generated_split_check.head())
+            display(generated_split_check.tail())
             """
         ),
         interp(

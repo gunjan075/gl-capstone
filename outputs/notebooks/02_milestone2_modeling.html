@@ -7511,7 +7511,7 @@ a.anchor-link {
 <!-- End of mermaid configuration --></head>
 <body class="jp-Notebook" data-jp-theme-light="true" data-jp-theme-name="JupyterLab Light">
 <main>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=71af2767">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=787c1447">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7522,7 +7522,7 @@ a.anchor-link {
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=7b937088">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=5bb72ab5">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7534,7 +7534,7 @@ calibration behavior, explainability outputs, and Streamlit deployment artifacts
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=a00b8e9b">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=419af7ae">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7567,7 +7567,7 @@ calibration behavior, explainability outputs, and Streamlit deployment artifacts
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=85216bae">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=97d1cb37">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7579,7 +7579,7 @@ calibration behavior, explainability outputs, and Streamlit deployment artifacts
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=dda2f45c">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c966815c">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7589,7 +7589,7 @@ calibration behavior, explainability outputs, and Streamlit deployment artifacts
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=11dbc453">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=f4a202ed">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7597,9 +7597,44 @@ calibration behavior, explainability outputs, and Streamlit deployment artifacts
 <div class="jp-InputPrompt jp-InputArea-prompt">In [2]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">split_check</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">TABLE_DIR</span> <span class="o">/</span> <span class="s2">"target_band_split_check.csv"</span><span class="p">)</span>
-<span class="n">display</span><span class="p">(</span><span class="n">split_check</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
-<span class="n">display</span><span class="p">(</span><span class="n">split_check</span><span class="o">.</span><span class="n">tail</span><span class="p">())</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">train_test_split</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">insurance_modeling</span><span class="w"> </span><span class="kn">import</span> <span class="n">clean_column_names</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">run_all</span><span class="w"> </span><span class="kn">import</span> <span class="n">RANDOM_STATE</span><span class="p">,</span> <span class="n">TARGET</span><span class="p">,</span> <span class="n">make_target_strata</span><span class="p">,</span> <span class="n">target_grid_metadata</span>
+
+<span class="n">raw_model_df</span> <span class="o">=</span> <span class="n">clean_column_names</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">ROOT</span> <span class="o">/</span> <span class="s2">"Insurance Data.csv"</span><span class="p">))</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">raw_model_df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="n">TARGET</span><span class="p">,</span> <span class="s2">"applicant_id"</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s2">"ignore"</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">raw_model_df</span><span class="p">[</span><span class="n">TARGET</span><span class="p">]</span>
+
+<span class="n">split_strata</span> <span class="o">=</span> <span class="n">make_target_strata</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span>
+    <span class="n">X</span><span class="p">,</span>
+    <span class="n">y</span><span class="p">,</span>
+    <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+    <span class="n">random_state</span><span class="o">=</span><span class="n">RANDOM_STATE</span><span class="p">,</span>
+    <span class="n">stratify</span><span class="o">=</span><span class="n">split_strata</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">valid_levels</span> <span class="o">=</span> <span class="n">target_grid_metadata</span><span class="p">(</span><span class="n">y_train</span><span class="p">)[</span><span class="s2">"valid_target_levels"</span><span class="p">]</span>
+<span class="n">train_counts</span> <span class="o">=</span> <span class="n">y_train</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">sort_index</span><span class="p">()</span>
+<span class="n">test_counts</span> <span class="o">=</span> <span class="n">y_test</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">sort_index</span><span class="p">()</span>
+<span class="n">generated_split_check</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+    <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="s2">"insurance_cost"</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">level</span><span class="p">),</span>
+            <span class="s2">"train_count"</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">train_counts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">level</span><span class="p">,</span> <span class="mi">0</span><span class="p">)),</span>
+            <span class="s2">"test_count"</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">test_counts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">level</span><span class="p">,</span> <span class="mi">0</span><span class="p">)),</span>
+            <span class="s2">"train_pct"</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">train_counts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">level</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">y_train</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
+            <span class="s2">"test_pct"</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">test_counts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">level</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">y_test</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
+        <span class="p">}</span>
+        <span class="k">for</span> <span class="n">level</span> <span class="ow">in</span> <span class="n">valid_levels</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+
+<span class="n">saved_split_check</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">TABLE_DIR</span> <span class="o">/</span> <span class="s2">"target_band_split_check.csv"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Matches saved target_band_split_check.csv:"</span><span class="p">,</span> <span class="n">generated_split_check</span><span class="o">.</span><span class="n">equals</span><span class="p">(</span><span class="n">saved_split_check</span><span class="p">))</span>
+<span class="n">display</span><span class="p">(</span><span class="n">generated_split_check</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+<span class="n">display</span><span class="p">(</span><span class="n">generated_split_check</span><span class="o">.</span><span class="n">tail</span><span class="p">())</span>
 </pre></div>
 </div>
 </div>
@@ -7609,6 +7644,13 @@ calibration behavior, explainability outputs, and Streamlit deployment artifacts
 <div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
 </div>
 <div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>Matches saved target_band_split_check.csv: True
+</pre>
+</div>
+</div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
@@ -7760,7 +7802,7 @@ calibration behavior, explainability outputs, and Streamlit deployment artifacts
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=972ea7e3">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=653d052e">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7772,7 +7814,7 @@ calibration behavior, explainability outputs, and Streamlit deployment artifacts
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=e2f8d869">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=7c1359f1">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7782,7 +7824,7 @@ calibration behavior, explainability outputs, and Streamlit deployment artifacts
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=713984c2">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=4fb0932a">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8037,7 +8079,7 @@ calibration behavior, explainability outputs, and Streamlit deployment artifacts
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c19fca7a">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=878d0732">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8049,7 +8091,7 @@ calibration behavior, explainability outputs, and Streamlit deployment artifacts
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=2a305028">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=662e1748">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8059,7 +8101,7 @@ calibration behavior, explainability outputs, and Streamlit deployment artifacts
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=c3897460">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=bec1d6f5">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8143,7 +8185,7 @@ calibration behavior, explainability outputs, and Streamlit deployment artifacts
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=1a8ce384">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=7e220fe4">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8155,7 +8197,7 @@ calibration behavior, explainability outputs, and Streamlit deployment artifacts
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=ba3ef5a7">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=5a6ab507">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8165,7 +8207,7 @@ calibration behavior, explainability outputs, and Streamlit deployment artifacts
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=dc288ea5">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=10b88056">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8383,7 +8425,7 @@ calibration behavior, explainability outputs, and Streamlit deployment artifacts
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=0c3fd826">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=2969e38d">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8421,7 +8463,7 @@ calibration behavior, explainability outputs, and Streamlit deployment artifacts
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=2b984ddd">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=d744460d">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8433,7 +8475,7 @@ calibration behavior, explainability outputs, and Streamlit deployment artifacts
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=a3cdd7d3">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=100eb5f0">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8443,7 +8485,7 @@ calibration behavior, explainability outputs, and Streamlit deployment artifacts
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=ed2e63c3">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=fd0f2c1f">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9049,7 +9091,7 @@ calibration behavior, explainability outputs, and Streamlit deployment artifacts
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=8580b4f4">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=6c401811">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9061,7 +9103,7 @@ calibration behavior, explainability outputs, and Streamlit deployment artifacts
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=79a10df8">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=aafacc78">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9071,7 +9113,7 @@ calibration behavior, explainability outputs, and Streamlit deployment artifacts
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=2c47cba4">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=1088ed1b">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9199,7 +9241,7 @@ calibration behavior, explainability outputs, and Streamlit deployment artifacts
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=aeee4e32">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=f275e39d">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9211,7 +9253,7 @@ calibration behavior, explainability outputs, and Streamlit deployment artifacts
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=554bf2a9">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=4b867cbe">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9221,7 +9263,7 @@ calibration behavior, explainability outputs, and Streamlit deployment artifacts
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=b96a226f">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=d200cf42">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9436,7 +9478,7 @@ calibration behavior, explainability outputs, and Streamlit deployment artifacts
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=8b0e319c">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=e793403c">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9473,7 +9515,7 @@ calibration behavior, explainability outputs, and Streamlit deployment artifacts
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=873e0fed">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=253743ab">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9511,7 +9553,7 @@ calibration behavior, explainability outputs, and Streamlit deployment artifacts
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=51c0dd40">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=3d04618a">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9523,7 +9565,7 @@ calibration behavior, explainability outputs, and Streamlit deployment artifacts
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=6d2d4929">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=5bef1e1f">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9535,7 +9577,7 @@ calibration behavior, explainability outputs, and Streamlit deployment artifacts
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=70bf6c81">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=f538f5b7">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9545,7 +9587,7 @@ calibration behavior, explainability outputs, and Streamlit deployment artifacts
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=4f9b7fe6">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=a705ab25">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9635,7 +9677,7 @@ calibration behavior, explainability outputs, and Streamlit deployment artifacts
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=442d27ec">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=dd8f3448">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9647,7 +9689,7 @@ calibration behavior, explainability outputs, and Streamlit deployment artifacts
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=7648694d">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=290b964a">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9657,7 +9699,7 @@ calibration behavior, explainability outputs, and Streamlit deployment artifacts
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=fa5d6d04">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=402aa0c6">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9734,7 +9776,7 @@ calibration behavior, explainability outputs, and Streamlit deployment artifacts
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=30bb2e9c">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=e47b79d1">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9746,7 +9788,7 @@ calibration behavior, explainability outputs, and Streamlit deployment artifacts
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=7f0b5a86">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=234de8f9">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9756,7 +9798,7 @@ calibration behavior, explainability outputs, and Streamlit deployment artifacts
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=0c2fad09">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=9bd109e8">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9899,7 +9941,7 @@ calibration behavior, explainability outputs, and Streamlit deployment artifacts
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=623e97aa">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=6f904270">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9937,7 +9979,7 @@ calibration behavior, explainability outputs, and Streamlit deployment artifacts
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c4a99cf8">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=26fc939e">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9949,7 +9991,7 @@ calibration behavior, explainability outputs, and Streamlit deployment artifacts
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=df62c0b5">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=8a2023fa">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9959,7 +10001,7 @@ calibration behavior, explainability outputs, and Streamlit deployment artifacts
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=4c7d5700">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=a7490967">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -10100,7 +10142,7 @@ calibration behavior, explainability outputs, and Streamlit deployment artifacts
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=de01e827">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=2906e09b">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -10137,7 +10179,7 @@ calibration behavior, explainability outputs, and Streamlit deployment artifacts
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=1580347f">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=6ea8fc8a">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -10175,7 +10217,7 @@ calibration behavior, explainability outputs, and Streamlit deployment artifacts
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=9f239271">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=014b3b7c">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -10187,7 +10229,7 @@ calibration behavior, explainability outputs, and Streamlit deployment artifacts
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=4dcaeed6">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=50b7fac7">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -10197,7 +10239,7 @@ calibration behavior, explainability outputs, and Streamlit deployment artifacts
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=afad890c">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=742deffd">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -10226,7 +10268,7 @@ calibration behavior, explainability outputs, and Streamlit deployment artifacts
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=3bbea5ac">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=7c078af8">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -10363,7 +10405,7 @@ calibration behavior, explainability outputs, and Streamlit deployment artifacts
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=6de6c63a">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=3cd90b37">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -10375,7 +10417,7 @@ calibration behavior, explainability outputs, and Streamlit deployment artifacts
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=d7ae9240">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c2804c29">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -10385,7 +10427,7 @@ calibration behavior, explainability outputs, and Streamlit deployment artifacts
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=848ee222">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=0f85eff6">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -10417,7 +10459,7 @@ calibration behavior, explainability outputs, and Streamlit deployment artifacts
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=ea044965">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=2725fa8e">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -10429,7 +10471,7 @@ calibration behavior, explainability outputs, and Streamlit deployment artifacts
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=dc8416c0">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=f742f336">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -10439,7 +10481,7 @@ calibration behavior, explainability outputs, and Streamlit deployment artifacts
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=2d2634d4">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=b790f1e9">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -10518,7 +10560,7 @@ calibration behavior, explainability outputs, and Streamlit deployment artifacts
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=1b9567ee">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=cf60b421">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -10530,7 +10572,7 @@ calibration behavior, explainability outputs, and Streamlit deployment artifacts
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=5d79fe7f">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b93d04b1">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -10541,7 +10583,7 @@ calibration behavior, explainability outputs, and Streamlit deployment artifacts
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=921df4e0">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=5994c755">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -10553,7 +10595,7 @@ calibration behavior, explainability outputs, and Streamlit deployment artifacts
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=829a96bf">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=411d99c6">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -10565,7 +10607,7 @@ calibration behavior, explainability outputs, and Streamlit deployment artifacts
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=7d1ffe9e">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=a3941d8e">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -10575,7 +10617,7 @@ calibration behavior, explainability outputs, and Streamlit deployment artifacts
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=e451d702">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=f21bea20">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -10671,7 +10713,7 @@ calibration behavior, explainability outputs, and Streamlit deployment artifacts
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=82899c8d">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=e0784c4b">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -10683,7 +10725,7 @@ calibration behavior, explainability outputs, and Streamlit deployment artifacts
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=32e27095">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=f5e5f1bd">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -10694,7 +10736,7 @@ calibration behavior, explainability outputs, and Streamlit deployment artifacts
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c4469d48">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=79bcd2d7">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>

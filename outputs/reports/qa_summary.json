@@ -240,5 +240,6 @@
     "final_model": "outputs/models/final_model.pkl",
     "milestone1_rubric_coverage_matrix": "outputs/reports/milestone1_rubric_coverage_matrix.csv",
     "univariate_plot_interpretations": "outputs/tables/univariate_plot_interpretations.csv"
-  }
+  },
+  "notebook_split_check_note": "Milestone 2 notebook reconstructs target_band_split_check.csv from the stratified train/test split and verifies it matches the saved artifact."
 }
