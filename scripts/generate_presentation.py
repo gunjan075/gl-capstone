@@ -116,7 +116,7 @@ def split_slide(title, name, bullets, size=13):
         if isinstance(it, tuple):
             it, lvl = it
         p = tf.paragraphs[0] if i == 0 else tf.add_paragraph()
-        p.text = "• " + it if lvl == 0 else "   – " + it
+        p.text = "- " + it if lvl == 0 else "   - " + it
         p.font.size = Pt(size - lvl)
         p.space_after = Pt(6)
     return s
@@ -147,13 +147,13 @@ def table_slide(title, df, fontsize=10):
 # ===================================================================== #
 clear_slides()
 
-# 1 — Title
+# 1 - Title
 s = add(L_TITLE)
 s.shapes.title.text = "Insurance Price Prediction"
-s.placeholders[1].text = ("Capstone Project — Final Presentation\n"
-                          "Group << n >>  ·  Batch << year >>  ·  Mentor: << Name >>")
+s.placeholders[1].text = ("Capstone Project - Final Presentation\n"
+                          "Group << n >>  -  Batch << year >>  -  Mentor: << Name >>")
 
-# 2 — Agenda
+# 2 - Agenda
 s = add(L_BODY); set_title(s, "Contents / Agenda")
 set_body(s, [
     "Executive Summary",
@@ -164,23 +164,23 @@ set_body(s, [
     "Model Performance & Final Model",
     "Explainability (Permutation + SHAP)",
     "Business Insights & Recommendations",
-    "Deployment Showcase",
+    "Deployment",
     "Appendix",
 ])
 
-# 3 — Executive Summary
+# 3 - Executive Summary
 s = add(L_BODY); set_title(s, "Executive Summary")
 set_body(s, [
     "Problem: estimate an applicant's insurance_cost from health, lifestyle, habit, and "
     "demographic data to support fair pricing and risk triage.",
-    f"Final model: LightGBM — Test R² = {M['test_R2']:.3f}, MAE = {M['test_MAE']:,.0f}, "
+    f"Final model: LightGBM - Test R2 = {M['test_R2']:.3f}, MAE = {M['test_MAE']:,.0f}, "
     f"RMSE = {M['test_RMSE']:,.0f} (beats the reference solution).",
     "13 model families compared; tuned with RandomizedSearchCV & Optuna; XGBoost/CatBoost on GPU.",
     "Key drivers: weight, admission history, other-insurer coverage, preventive checkups.",
     "Deployed as a leak-free sklearn pipeline via FastAPI + a React UI + a Streamlit app.",
 ], size=14)
 
-# 4 — Business Problem & Solution
+# 4 - Business Problem & Solution
 s = add(L_BODY); set_title(s, "Business Problem Overview & Solution Approach")
 set_body(s, [
     "Problem: healthcare costs are high; insurers must price policies to balance affordability "
@@ -189,94 +189,94 @@ set_body(s, [
     ("Audit & clean the data; fix schema/category quality issues.", 1),
     ("Treat missing values and outliers; engineer risk-oriented features.", 1),
     ("Compare baseline, linear, tree, and boosting models with cross-validation.", 1),
-    ("Tune the best family; select on RMSE/MAE/R² + stability + overfit gap.", 1),
+    ("Tune the best family; select on RMSE/MAE/R2 + stability + overfit gap.", 1),
     ("Explain the model and deploy it for inference.", 1),
 ])
 
-# 5 — Data Overview
+# 5 - Data Overview
 s = add(L_BODY); set_title(s, "Data Overview")
 set_body(s, [
-    "25,000 applicants × 24 columns; one row per applicant; no duplicate rows.",
-    "Target insurance_cost: mean ≈ 27,147, mild right skew (≈ 0.33).",
+    "25,000 applicants x 24 columns; one row per applicant; no duplicate rows.",
+    "Target insurance_cost: mean ~ 27,147, mild right skew (~ 0.33).",
     "Missing values in only two columns:",
-    ("Year_last_admitted — 47.5% (meaningful: indicates no prior admission)", 1),
-    ("bmi — 4.0% (imputed by age-band × gender median)", 1),
+    ("Year_last_admitted - 47.5% (meaningful: indicates no prior admission)", 1),
+    ("bmi - 4.0% (imputed by age-band x gender median)", 1),
     "Mixed types: continuous, discrete counts, binary flags, nominal & ordinal categoricals.",
-    "Fixed source typos in column names and the 'Salried' → 'Salaried' category.",
+    "Fixed source typos in column names and the 'Salried' -> 'Salaried' category.",
 ])
 
-# 6-7 — EDA
-image_slide("EDA — Distributions of Continuous Attributes", "univariate_continuous.png",
+# 6-7 - EDA
+image_slide("EDA - Distributions of Continuous Attributes", "univariate_continuous.png",
             "Target is mildly right-skewed; weight, BMI, glucose, and steps are roughly symmetric.")
-split_slide("EDA — Key Relationships", "boxplots_by_category.png", [
-    "weight has an unusually strong positive link to cost — the dominant signal.",
+split_slide("EDA - Key Relationships", "boxplots_by_category.png", [
+    "weight has an unusually strong positive link to cost - the dominant signal.",
     "Higher cost for applicants covered by another insurer and adventure-sports participants.",
     "Admission history adds useful risk information.",
     "Lifestyle effects act mainly through nonlinear interactions captured by boosting.",
     ("Flagged: validate weight dominance for plausibility/leakage.", 1),
 ])
 
-# 8 — Preprocessing
+# 8 - Preprocessing
 s = add(L_BODY); set_title(s, "Data Preprocessing")
 set_body(s, [
     "Duplicate check: none; dropped applicant_id (non-predictive identifier).",
-    "Missing values: grouped-median BMI imputation; Year_last_admitted → was_admitted_before + "
+    "Missing values: grouped-median BMI imputation; Year_last_admitted -> was_admitted_before + "
     "years_since_last_admitted.",
     "Outliers: capped unrealistic BMI; retained valid high-premium targets.",
     "Feature engineering: age_band, bmi_category, cholesterol_midpoint, any_major_disease_history, "
     "weight_bmi_interaction, steps_per_age.",
-    "Leak-free sklearn Pipeline: feature engineering → impute + scale + one-hot → model "
+    "Leak-free sklearn Pipeline: feature engineering -> impute + scale + one-hot -> model "
     "(fit on training data only).",
 ])
 
-# 9 — Model Selection & Metrics
+# 9 - Model Selection & Metrics
 s = add(L_BODY); set_title(s, "Model Selection & Metrics of Interest")
 set_body(s, [
     "Baseline: DummyRegressor (mean) and LinearRegression.",
     "Advanced: Ridge/Lasso/ElasticNet, DecisionTree/RandomForest/ExtraTrees, and boosting "
     "(GradientBoosting, HistGradientBoosting, XGBoost, LightGBM, CatBoost).",
     "Metrics of interest:",
-    ("MAE — average pricing error in cost units (primary, business-readable).", 1),
-    ("RMSE — penalises larger errors; R² — variance explained.", 1),
-    ("MAPE/SMAPE — percentage errors; CV RMSE & train-test gap — stability/overfit.", 1),
+    ("MAE - average pricing error in cost units (primary, business-readable).", 1),
+    ("RMSE - penalises larger errors; R2 - variance explained.", 1),
+    ("MAPE/SMAPE - percentage errors; CV RMSE & train-test gap - stability/overfit.", 1),
 ])
 
-# 10 — Model Performance Summary (table)
+# 10 - Model Performance Summary (table)
 comp = pd.read_csv(TAB / "model_comparison.csv")
 tbl_df = comp[["model", "train_R2", "test_R2", "test_RMSE", "test_MAE"]].head(7).round(3)
-tbl_df.columns = ["Model", "Train R²", "Test R²", "Test RMSE", "Test MAE"]
+tbl_df.columns = ["Model", "Train R2", "Test R2", "Test RMSE", "Test MAE"]
 table_slide("Model Performance Summary (top models by test RMSE)", tbl_df, fontsize=11)
 
-# 11 — Final model & evaluation
-split_slide("Final Model & Evaluation — LightGBM", "diagnostics.png", [
-    "Selected for lowest test RMSE/MAE, strong R², stable CV, small train/test gap.",
+# 11 - Final model & evaluation
+split_slide("Final Model & Evaluation - LightGBM", "diagnostics.png", [
+    "Selected for lowest test RMSE/MAE, strong R2, stable CV, small train/test gap.",
     f"Test MAE: {M['test_MAE']:,.0f}",
     f"Test RMSE: {M['test_RMSE']:,.0f}",
-    f"Test R²: {M['test_R2']:.4f}",
+    f"Test R2: {M['test_R2']:.4f}",
     f"Test MAPE: {M['test_MAPE']:.1f}%",
     "Residuals centred & homoscedastic; predictions track actuals.",
 ])
 
-# 12 — Explainability
-split_slide("Explainability — Permutation + SHAP", "shap_summary.png", [
+# 12 - Explainability
+split_slide("Explainability - Permutation + SHAP", "shap_summary.png", [
     "Two independent methods agree on the drivers:",
     ("weight (dominant)", 1),
     ("admission recency / history", 1),
     ("other-insurer coverage", 1),
     ("preventive checkups, weight change", 1),
-    "SHAP shows effect direction (higher weight → higher cost).",
+    "SHAP shows effect direction (higher weight -> higher cost).",
 ])
 
-# 13 — Business insights (lift)
-split_slide("Business Insights — Lift / Gains", "decile_gains.png", [
+# 13 - Business insights (lift)
+split_slide("Business Insights - Lift / Gains", "decile_gains.png", [
     "Applicants sorted by predicted cost into deciles.",
     "Top deciles carry lift well above 1.0.",
     "Cumulative-gains curve sits above random.",
-    "→ Effective ranking for underwriting triage and",
+    "-> Effective ranking for underwriting triage and",
     ("targeting high-cost segments.", 1),
 ])
 
-# 14 — Recommendations
+# 14 - Recommendations
 s = add(L_BODY); set_title(s, "Business Recommendations")
 set_body(s, [
     "Use as pricing decision-support, not automated underwriting (track override rate).",
@@ -286,23 +286,23 @@ set_body(s, [
     "Monitor drift, segment-level error, and override rates post-deployment.",
 ])
 
-# 15 — Deployment showcase
-s = add(L_BODY); set_title(s, "Deployment Showcase")
+# 15 - Deployment showcase
+s = add(L_BODY); set_title(s, "Deployment")
 set_body(s, [
     "Production pipeline saved as one sklearn artifact (models/final_model.pkl).",
-    "FastAPI service: /health, /schema, /predict → cost + Low/Medium/High risk + top drivers.",
+    "FastAPI service: /health, /schema, /predict -> cost + Low/Medium/High risk + top drivers.",
     "React + TypeScript + Tailwind UI, built dynamically from the API schema.",
     "Streamlit app for a one-click demo of the same model.",
     "GPU acceleration (XGBoost/CatBoost); reproducible via `uv run python -m insurance.train`.",
 ])
 
-# 16 — Appendix divider
+# 16 - Appendix divider
 s = add(L_SECTION); set_title(s, "Appendix")
 
-# 17 — Data background
-s = add(L_BODY); set_title(s, "Appendix — Data Background")
+# 17 - Data background
+s = add(L_BODY); set_title(s, "Appendix - Data Background")
 set_body(s, [
-    "Source: Insurance Data.csv — 25,000 rows × 24 columns; target insurance_cost.",
+    "Source: Insurance Data.csv - 25,000 rows x 24 columns; target insurance_cost.",
     "Predictors span profile (age, gender, occupation, location), health (bmi, glucose, "
     "cholesterol, disease history), habits (smoking, alcohol, exercise, steps), and policy fields.",
     "Full data dictionary: reports/tables/data_dictionary.csv; model comparison & importance "
@@ -311,11 +311,11 @@ set_body(s, [
     "predictors must be available at quote time; expand fairness testing before production.",
 ])
 
-# 18 — Permutation importance appendix figure
-image_slide("Appendix — Permutation Importance", "feature_importance.png",
+# 18 - Permutation importance appendix figure
+image_slide("Appendix - Permutation Importance", "feature_importance.png",
             "Permutation importance of input features for the final LightGBM model.")
 
-# 19 — Thank you
+# 19 - Thank you
 s = add(L_SECTION); set_title(s, "Thank You")
 
 out = ROOT / "Insurance_Price_Prediction_Final_Presentation.pptx"

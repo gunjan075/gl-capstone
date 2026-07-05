@@ -1,4 +1,4 @@
-"""Insurance price prediction — production pipeline package.
+"""Insurance price prediction - production pipeline package.
 
 End-to-end regression workflow for estimating ``insurance_cost`` from health,
 lifestyle, habit, and demographic variables. Notebooks in ``experiments/`` and

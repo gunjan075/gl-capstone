@@ -15,10 +15,10 @@ from insurance import config
 from insurance.predict import load_bundle, predict
 from insurance.schemas import FIELD_SPECS
 
-st.set_page_config(page_title="Insurance Price Prediction", page_icon="💰", layout="centered")
+st.set_page_config(page_title="Insurance Price Prediction", layout="centered")
 
-st.title("💰 Insurance Price Prediction")
-st.caption("Decision-support tool — estimates insurance cost from health & lifestyle inputs. Not a final underwriting decision.")
+st.title("Insurance Price Prediction")
+st.caption("Decision-support tool - estimates insurance cost from health & lifestyle inputs. Not a final underwriting decision.")
 
 if not config.MODEL_PATH.exists():
     st.error("Model artifact not found. Run `uv run python -m insurance.train` first.")
@@ -29,7 +29,7 @@ st.sidebar.header("Model")
 st.sidebar.write(f"**{bundle.get('model_name', 'model')}**")
 m = bundle.get("metrics", {})
 if m:
-    st.sidebar.metric("Test R²", f"{m.get('test_R2', 0):.3f}")
+    st.sidebar.metric("Test R2", f"{m.get('test_R2', 0):.3f}")
     st.sidebar.metric("Test MAE", f"{m.get('test_MAE', 0):,.0f}")
 
 with st.form("applicant"):
@@ -64,7 +64,7 @@ if submitted:
     risk = result["risk_category"]
     color = {"Low": "green", "Medium": "orange", "High": "red"}[risk]
     c1, c2 = st.columns(2)
-    c1.metric("Predicted insurance cost", f"₹ {cost:,.0f}")
+    c1.metric("Predicted insurance cost", f"Rs. {cost:,.0f}")
     c2.markdown(f"### Risk band: :{color}[{risk}]")
 
     drivers = bundle.get("feature_importance", [])

@@ -3,7 +3,7 @@
 All derived features and the data-driven imputations (BMI group medians,
 admission-recency reference year) are learned on the training fold only, then
 applied identically at predict time. This is the single source of truth for
-feature creation — the EDA notebook, training, API, and Streamlit app all use it.
+feature creation - the EDA notebook, training, API, and Streamlit app all use it.
 """
 
 from __future__ import annotations

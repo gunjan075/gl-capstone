@@ -68,7 +68,7 @@ export default function App() {
               />
             ) : (
               <div className="rounded-2xl bg-white p-6 text-slate-400 shadow">
-                Loading form…
+                Loading form...
               </div>
             )}
           </div>

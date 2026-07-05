@@ -80,7 +80,7 @@ export default function InsuranceForm({ fields, loading, onSubmit }: Props) {
         disabled={loading}
         className="mt-6 w-full rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow transition hover:bg-indigo-500 disabled:cursor-not-allowed disabled:opacity-60"
       >
-        {loading ? "Predicting…" : "Predict insurance cost"}
+        {loading ? "Predicting..." : "Predict insurance cost"}
       </button>
     </form>
   );

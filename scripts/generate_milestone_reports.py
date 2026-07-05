@@ -73,7 +73,7 @@ def bullets(doc: Document, items: list[str]) -> None:
 def figure(doc: Document, name: str, caption: str, width: float = 6.0) -> None:
     path = FIG / name
     if not path.exists():
-        para(doc, f"[figure {name} not found — run the notebooks to generate it]")
+        para(doc, f"[figure {name} not found - run the notebooks to generate it]")
         return
     doc.add_picture(str(path), width=Inches(width))
     doc.paragraphs[-1].alignment = WD_ALIGN_PARAGRAPH.CENTER
@@ -137,7 +137,7 @@ def build_milestone1() -> None:
 
     heading(doc, "Data Report")
     para(doc,
-         "The dataset (Insurance Data.csv) contains 25,000 rows and 24 columns — one row per "
+         "The dataset (Insurance Data.csv) contains 25,000 rows and 24 columns - one row per "
          "applicant (applicant_id is unique). There are no duplicate rows. The target insurance_cost "
          "has a mean of ~27,147 and a median of ~27,148 with a mild right skew (~0.33). Only two "
          "columns contain missing values: Year_last_admitted (11,881 missing, 47.52%) and bmi "
@@ -174,7 +174,7 @@ def build_milestone1() -> None:
     figure(doc, "missing_values.png", "Missing values by column (only Year_last_admitted and bmi).", 4.5)
     para(doc,
          "Missing-value decision: Year_last_admitted is missing for ~47.5% of applicants, which is "
-         "meaningful — it indicates no prior hospital admission rather than a random gap. It is "
+         "meaningful - it indicates no prior hospital admission rather than a random gap. It is "
          "therefore re-expressed as engineered features (was_admitted_before, "
          "years_since_last_admitted) instead of being dropped or naively imputed. bmi has only ~4% "
          "missing and is imputed with the median by (age band, gender) with a global fallback, "
@@ -251,8 +251,8 @@ def build_milestone2() -> None:
     heading(doc, "Model Selection and Metrics of Interest")
     para(doc, "Baseline models:")
     bullets(doc, [
-        "DummyRegressor (predicts the mean) — establishes the no-skill floor.",
-        "LinearRegression — first interpretable real baseline.",
+        "DummyRegressor (predicts the mean) - establishes the no-skill floor.",
+        "LinearRegression - first interpretable real baseline.",
     ])
     para(doc, "Advanced models:")
     bullets(doc, [
@@ -262,11 +262,11 @@ def build_milestone2() -> None:
     ])
     para(doc, "Metrics of interest (regression):")
     bullets(doc, [
-        "MAE — average absolute pricing error in cost units (primary, business-readable).",
-        "RMSE — penalises larger pricing errors more heavily.",
-        "R² — share of cost variance explained.",
-        "MAPE / SMAPE — percentage-style errors for business communication.",
-        "Cross-validated RMSE and the train-test RMSE gap — to check stability and overfitting.",
+        "MAE - average absolute pricing error in cost units (primary, business-readable).",
+        "RMSE - penalises larger pricing errors more heavily.",
+        "R2 - share of cost variance explained.",
+        "MAPE / SMAPE - percentage-style errors for business communication.",
+        "Cross-validated RMSE and the train-test RMSE gap - to check stability and overfitting.",
     ])
 
     heading(doc, "Model Building and Evaluation")
@@ -289,36 +289,36 @@ def build_milestone2() -> None:
     para(doc,
          f"The gradient-boosting models clearly outperform the linear and single-tree models. "
          f"{final} was selected as the final model: it achieves the lowest test RMSE and MAE with a "
-         f"strong R², a stable cross-validation score, and a small train-test gap (low "
+         f"strong R2, a stable cross-validation score, and a small train-test gap (low "
          f"overfitting). RandomizedSearch tuning did not improve on the well-chosen defaults, so the "
          f"default configuration was retained for simplicity and robustness.")
     para(doc, "Final model performance on the held-out test set:")
     bullets(doc, [
         f"MAE: {m['test_MAE']:,.0f}",
         f"RMSE: {m['test_RMSE']:,.0f}",
-        f"R²: {m['test_R2']:.4f}",
+        f"R2: {m['test_R2']:.4f}",
         f"MAPE: {m['test_MAPE']:.1f}%",
     ])
     figure(doc, "diagnostics.png", "Predicted vs actual and residuals for the final model.", 6.0)
 
     heading(doc, "Business Insights and Recommendations")
     para(doc,
-         "Model explainability (permutation importance in production, corroborated by SHAP in the "
+         "Model explainability (permutation importance in production, confirmed by SHAP in the "
          "notebook) identifies the key drivers of predicted insurance cost: weight is by far the "
          "dominant factor, followed by admission history (Year_last_admitted), coverage by another "
          "insurer, preventive checkups, and weight change.")
-    figure(doc, "feature_importance.png", "Permutation importance — top model drivers.", 5.0)
-    figure(doc, "shap_summary.png", "SHAP summary — per-feature contribution and direction.", 5.0)
+    figure(doc, "feature_importance.png", "Permutation importance - top model drivers.", 5.0)
+    figure(doc, "shap_summary.png", "SHAP summary - per-feature contribution and direction.", 5.0)
     figure(doc, "decile_gains.png", "Lift and cumulative gains by predicted-cost decile.", 6.0)
     para(doc, "Actionable recommendations (with measurable outcomes):")
     bullets(doc, [
-        "Use the model as pricing decision-support, not automated underwriting — track quote "
+        "Use the model as pricing decision-support, not automated underwriting - track quote "
         "turnaround time and underwriter override rate.",
-        "Route extreme predictions (top decile) to manual review — measure reduction in mispriced "
+        "Route extreme predictions (top decile) to manual review - measure reduction in mispriced "
         "high-cost policies.",
         "Target wellness programmes (weight management, preventive checkups, activity) at high-risk "
-        "segments — track engagement and downstream claim reduction.",
-        "Trigger documentation/preventive checks on prior-admission applicants — measure claim "
+        "segments - track engagement and downstream claim reduction.",
+        "Trigger documentation/preventive checks on prior-admission applicants - measure claim "
         "accuracy improvement.",
         "Apply fairness governance to Gender/Location and validate the dominance of weight for "
         "plausibility and leakage before production; monitor segment-level error and drift.",

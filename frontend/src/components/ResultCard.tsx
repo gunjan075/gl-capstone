@@ -46,7 +46,7 @@ export default function ResultCard({ result }: Props) {
       )}
 
       <p className="mt-6 text-xs text-slate-400">
-        Decision-support estimate only — not a final underwriting decision.
+        Decision-support estimate only - not a final underwriting decision.
       </p>
     </div>
   );
