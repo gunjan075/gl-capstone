@@ -3513,7 +3513,7 @@ def create_notebooks() -> list[Path]:
             "Milestone 1 is treated as the analytical foundation: data quality, target behavior, missingness, and important relationships are documented before model fitting.",
             "A pricing model is only useful if reviewers can see why the data is usable, what the target means, and which applicant characteristics drive the estimate.",
         ),
-        md("## 2. Rubric Coverage Map"),
+        md("## 2. Import Libraries and Set Paths"),
         code(
             """
             import json
@@ -3522,7 +3522,10 @@ def create_notebooks() -> list[Path]:
 
             import numpy as np
             import pandas as pd
+            import matplotlib.pyplot as plt
+            import seaborn as sns
             from IPython.display import Image, Markdown, display
+            from insurance_modeling import RAW_MODEL_COLUMNS, clean_column_names
 
             ROOT = Path.cwd()
             if not (ROOT / "Insurance Data.csv").exists():
@@ -3534,21 +3537,6 @@ def create_notebooks() -> list[Path]:
             MODEL_DIR = ROOT / "outputs" / "models"
             REPORT_DIR = ROOT / "outputs" / "reports"
 
-            rubric = pd.read_csv(REPORT_DIR / "milestone1_rubric_coverage_matrix.csv")
-            rubric
-            """
-        ),
-        interp(
-            "The coverage matrix links each 10-mark rubric area to a specific DOCX section, notebook section, chart, table, or code artifact.",
-            "The reviewer can quickly verify that Data Report, Initial EDA, Data Pre-processing, and Extensive EDA are all explicitly covered.",
-        ),
-        md("## 3. Import Libraries and Set Paths"),
-        code(
-            """
-            import matplotlib.pyplot as plt
-            import seaborn as sns
-            from insurance_modeling import RAW_MODEL_COLUMNS, clean_column_names
-
             sns.set_theme(style="whitegrid")
             pd.set_option("display.max_columns", 80)
             pd.set_option("display.width", 140)
@@ -3559,7 +3547,7 @@ def create_notebooks() -> list[Path]:
             "The notebook uses the same project root, modeling helper functions, and generated output folders as the automated pipeline.",
             "This keeps the notebook evidence reproducible and prevents the submitted report from drifting away from the code.",
         ),
-        md("## 4. Load Raw Dataset"),
+        md("## 3. Load Raw Dataset"),
         code(
             """
             raw_df = pd.read_csv(ROOT / "Insurance Data.csv")
@@ -3577,7 +3565,7 @@ def create_notebooks() -> list[Path]:
             "The raw file loads successfully with 25,000 rows and 24 original columns, and visual inspection confirms mixed numeric and categorical applicant fields.",
             "The dataset is large enough for supervised learning while still small enough for transparent EDA and report-level validation.",
         ),
-        md("## 5. Initial Data Inspection"),
+        md("## 4. Initial Data Inspection"),
         code(
             """
             raw_df.info()
@@ -3596,7 +3584,7 @@ def create_notebooks() -> list[Path]:
             "The initial inspection finds no duplicate rows, a unique `applicant_id`, and missing values only in BMI and admission-year fields.",
             "The data can move forward after targeted preprocessing rather than broad row deletion or aggressive cleanup.",
         ),
-        md("## 6. Data Dictionary and Variable Understanding"),
+        md("## 5. Data Dictionary and Variable Understanding"),
         code(
             """
             dataset_profile = pd.DataFrame(
@@ -3624,7 +3612,7 @@ def create_notebooks() -> list[Path]:
             "The variable classification distinguishes identifiers, the quote-grid target, continuous numeric features, ordinal numeric features, binary flags, and nominal categories.",
             "`applicant_id` is retained for audit only and excluded from modeling and the Streamlit schema.",
         ),
-        md("## 7. Column Renaming and Data Cleanup"),
+        md("## 6. Column Renaming and Data Cleanup"),
         code(
             """
             cleaned_df = clean_column_names(raw_df)
@@ -3637,7 +3625,7 @@ def create_notebooks() -> list[Path]:
             "The cleanup normalizes misspelled source columns and category labels while preserving the original data meaning.",
             "Clean names reduce downstream coding errors and make the final app schema easier for reviewers to inspect.",
         ),
-        md("## 8. Dataset Profile and Descriptive Statistics"),
+        md("## 7. Dataset Profile and Descriptive Statistics"),
         code(
             """
             categorical_cols = raw_df.select_dtypes(include=["object"]).columns.tolist()
@@ -3654,7 +3642,7 @@ def create_notebooks() -> list[Path]:
             "Descriptive statistics and frequency tables cover both numeric spread and categorical level balance.",
             "This satisfies the rubric requirement to describe variables before jumping into model building.",
         ),
-        md("## 9. Missing Value Analysis"),
+        md("## 8. Missing Value Analysis"),
         code(
             """
             missing_values = pd.read_csv(TABLE_DIR / "missing_values.csv")
@@ -3675,7 +3663,7 @@ def create_notebooks() -> list[Path]:
             "The missingness-impact chart shows target mean differences between present and missing groups.",
             "A reviewer can see why the pipeline uses flags and imputation instead of dropping incomplete records.",
         ),
-        md("## 10. Duplicate and Unwanted Variable Analysis"),
+        md("## 9. Duplicate and Unwanted Variable Analysis"),
         code(
             """
             duplicate_summary = pd.DataFrame(
@@ -3691,7 +3679,7 @@ def create_notebooks() -> list[Path]:
             "`applicant_id` is unique for every row and is not included in the modeling feature list.",
             "Removing the identifier avoids memorization and supports a deployable applicant-input form.",
         ),
-        md("## 11. Target Variable Analysis"),
+        md("## 10. Target Variable Analysis"),
         code(
             """
             target_summary = raw_df["insurance_cost"].agg(["count", "mean", "median", "std", "min", "max", "skew"]).round(3)
@@ -3708,7 +3696,7 @@ def create_notebooks() -> list[Path]:
             "The boxplot identifies upper-tail premiums, but these align with valid quote bands rather than impossible values.",
             "The business needs accurate estimates for expensive cases, so target outlier removal would be harmful.",
         ),
-        md("## 12. Target Pricing Grid Analysis"),
+        md("## 11. Target Pricing Grid Analysis"),
         code(
             """
             target_grid = pd.read_csv(TABLE_DIR / "target_grid_summary.csv")
@@ -3723,7 +3711,7 @@ def create_notebooks() -> list[Path]:
             "The target has 54 unique levels and a 1,234 unit grid step, proving that `insurance_cost` is a business quote grid.",
             "Deployment should show raw prediction plus nearest quote band instead of pretending the target is fully continuous.",
         ),
-        md("## 13. Univariate Analysis: Numeric Variables"),
+        md("## 12. Univariate Analysis: Numeric Variables"),
         code(
             """
             numeric_summary = pd.read_csv(TABLE_DIR / "numeric_summary.csv")
@@ -3735,7 +3723,7 @@ def create_notebooks() -> list[Path]:
             "Numeric variables show wide but plausible ranges; BMI is stabilized for analysis while valid premium outliers are retained.",
             "The preprocessing strategy protects model stability without deleting legitimate high-risk applicants.",
         ),
-        md("## 14. Univariate Analysis: Categorical, Binary, and Ordinal Variables"),
+        md("## 13. Univariate Analysis: Categorical, Binary, and Ordinal Variables"),
         code(
             """
             categorical_frequency = pd.read_csv(TABLE_DIR / "categorical_frequency.csv")
@@ -3749,7 +3737,7 @@ def create_notebooks() -> list[Path]:
             "Categorical and ordinal summaries show class balance and average-cost separation before multivariate modeling.",
             "This helps prevent overclaiming weak fields while still documenting business-relevant segments.",
         ),
-        md("## 15. Bivariate Analysis with Target"),
+        md("## 14. Bivariate Analysis with Target"),
         image_cell("outputs/figures/weight_vs_cost_jitter.png", "Insurance cost versus weight with jitter"),
         image_cell("outputs/figures/cost_by_weight_line.png", "Average insurance cost by weight"),
         interp(
@@ -3774,7 +3762,7 @@ def create_notebooks() -> list[Path]:
             "Admission-year and admission-status plots show that recency/history information is meaningful when represented carefully.",
             "Applicants without known admission history should not be forced into an arbitrary numeric admission year.",
         ),
-        md("## 16. Correlation and Association Analysis"),
+        md("## 15. Correlation and Association Analysis"),
         image_cell("outputs/figures/correlation_heatmap.png", "Correlation heatmap"),
         code(
             """
@@ -3786,7 +3774,7 @@ def create_notebooks() -> list[Path]:
             "The association table confirms strong observed signals for weight, admission recency/year, other coverage, checkups, weight change, and adventure sports.",
             "The report honestly labels smoking, alcohol, exercise, age, BMI, glucose, cholesterol, and disease flags as weak marginal signals in this dataset.",
         ),
-        md("## 17. Multivariate and Segmented EDA"),
+        md("## 16. Multivariate and Segmented EDA"),
         image_cell("outputs/figures/cost_age_bmi_heatmap.png", "Average cost by age band and BMI category"),
         image_cell("outputs/figures/cost_by_combined_risk_bands.png", "Average cost by medical and lifestyle risk bands"),
         interp(
@@ -3799,7 +3787,7 @@ def create_notebooks() -> list[Path]:
             "Smoking and disease-history views are retained for transparency, but they do not overturn the stronger weight and admission-history findings.",
             "The submission avoids overclaiming expected health variables when the supplied data shows weaker marginal effects.",
         ),
-        md("## 18. Outlier Detection and Treatment Strategy"),
+        md("## 17. Outlier Detection and Treatment Strategy"),
         code(
             """
             outliers = pd.read_csv(TABLE_DIR / "outlier_summary.csv")
@@ -3810,7 +3798,7 @@ def create_notebooks() -> list[Path]:
             "The outlier strategy separates true target extremes from numeric stabilization needs such as BMI capping.",
             "This is a balanced preprocessing decision: keep valid expensive customers, but avoid letting implausible BMI values distort analysis.",
         ),
-        md("## 19. Feature Engineering and Transformations"),
+        md("## 18. Feature Engineering and Transformations"),
         code(
             """
             engineered_cols = [
@@ -3827,7 +3815,7 @@ def create_notebooks() -> list[Path]:
             "Feature engineering converts missingness, ranges, and history fields into model-ready representations without leaking target information.",
             "The engineered variables give reviewers interpretable risk context and prepare the data for the Milestone 2 pipeline.",
         ),
-        md("## 20. Preprocessing Summary"),
+        md("## 19. Preprocessing Summary"),
         code(
             """
             preprocessing_summary = pd.DataFrame(
@@ -3847,7 +3835,7 @@ def create_notebooks() -> list[Path]:
             "The preprocessing plan is explicit, limited, and tied to each field's business meaning.",
             "This meets the rubric expectation for justifying unwanted-variable removal, missing-value handling, transformations, and new variables.",
         ),
-        md("## 21. Extensive EDA Summary"),
+        md("## 20. Extensive EDA Summary"),
         code(
             """
             strong = feature_signal[feature_signal["business_interpretation"].str.contains("strong", case=False, na=False)]
@@ -3860,7 +3848,7 @@ def create_notebooks() -> list[Path]:
             "The strongest observed variables are weight, admission-year/recency, other-company coverage, regular checkups, weight change, and adventure sports.",
             "This focused ranking helps the report explain what actually matters in the supplied data rather than listing every variable equally.",
         ),
-        md("## 22. Business Insights from EDA"),
+        md("## 21. Business Insights from EDA"),
         interp(
             "Quote bands and target-grid behavior mean RMSE/MAE should be supplemented with nearest-band evaluation in Milestone 2.",
             "Pricing teams need a business-ready quote band, not only a floating-point model prediction.",
@@ -3877,7 +3865,7 @@ def create_notebooks() -> list[Path]:
             "The EDA supports target-band stratification for train/test splitting because every quote band is a meaningful target level.",
             "The final model evaluation should preserve quote-band representation across train and test data.",
         ),
-        md("## 23. Milestone 1 Conclusion and Next Steps"),
+        md("## 22. Milestone 1 Conclusion and Next Steps"),
         interp(
             "The cleaned analytical dataset is ready for modeling after ID removal, targeted missingness treatment, feature engineering, and quote-grid-aware evaluation planning.",
             "Milestone 2 should compare baseline, linear, tree, boosted, calibrated, rounded, and deployment-ready variants with honest metric reporting.",
@@ -3886,7 +3874,7 @@ def create_notebooks() -> list[Path]:
             "EDA findings are association-based and should not be interpreted as underwriting policy or causal medical conclusions.",
             "The model can support pricing analysis, but final insurance decisions require policy, fairness, compliance, and human review.",
         ),
-        md("## 24. Appendix: Additional Tables and Plots"),
+        md("## 23. Appendix: Additional Tables and Plots"),
         code(
             """
             appendix_files = sorted(p.name for p in TABLE_DIR.glob("*.csv"))
